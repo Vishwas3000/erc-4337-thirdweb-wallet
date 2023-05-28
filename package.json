@@ -1,0 +1,14 @@
+{
+  "name": "thirdweb-wallet",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@thirdweb-dev/chains": "^0.1.18",
+    "@thirdweb-dev/sdk": "^3.10.17",
+    "@thirdweb-dev/wallets": "^0.2.22",
+    "dotenv": "^16.0.3",
+    "ethers": "5",
+    "thirdweb": "^0.10.18"
+  }
+}
