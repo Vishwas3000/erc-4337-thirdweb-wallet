@@ -1,6 +1,6 @@
 import Image from "next/image"
 import { Inter } from "next/font/google"
-import { ConnectWallet, Web3Button, useAddress } from "@thirdweb-dev/react"
+import { Web3Button, useAddress } from "@thirdweb-dev/react"
 import { nftMarketplaceAbi, contractAddress } from "../constants"
 import { useState } from "react"
 

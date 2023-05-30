@@ -258,7 +258,7 @@ export default function MintNFT() {
             console.log(" :", contract)
             // const tokenUri = await handleMintToken()
             const tokenUri =
-              "ipfs://bafkreighfwvkzrtpfr5zkckujoejoqzzofqbbawgiw5ahikqxukim4qow4"
+              "ipfs://bafkreics2jesmdzv6seaq7chfsxvfujfvorgflygglwhuleqivsdwnilcy"
             const data = await contract.call("mintNFT", [tokenUri])
             console.log("data: ", data)
           }}
