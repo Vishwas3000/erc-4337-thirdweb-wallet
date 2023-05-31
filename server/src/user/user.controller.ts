@@ -8,8 +8,9 @@ export class UserController {
 
   @Post('/create')
   @HttpCode(200)
-  @UsePipes(ValidationPipe)
+  // @UsePipes(ValidationPipe)
   async createUser(@Body() userData: CreateUserDto) {
+    console.log('userData', userData);
     return await this.userService.createUser(userData);
   }
 

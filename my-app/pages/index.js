@@ -4,8 +4,6 @@ import { Web3Button, useAddress } from "@thirdweb-dev/react"
 import { nftMarketplaceAbi, contractAddress } from "../constants"
 import { useState } from "react"
 
-const inter = Inter({ subsets: ["latin"] })
-
 export default function Home() {
   const [tokenId, setTokenId] = useState(0)
   const NFTAddress = contractAddress["NFTMarketplace"]
