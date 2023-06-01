@@ -7,13 +7,14 @@ import { ConfigModule } from '@nestjs/config/dist';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { MintEntryModule } from './mint-entry/mint-entry.module';
+import { WalletModule } from './wallet/wallet.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRootAsync(typeOrmConfigAsync), 
     ConfigModule.forRoot({isGlobal: true}), 
     UserModule, 
-    AuthModule, MintEntryModule,
+    AuthModule, MintEntryModule, WalletModule,
   ],
   controllers: [AppController],
   providers: [AppService],

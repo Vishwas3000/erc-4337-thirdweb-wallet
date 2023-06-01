@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, BeforeInsert, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, BeforeInsert, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
+import { Wallet } from 'src/wallet/wallet.entity';
 
 @Entity()
 export class User extends BaseEntity{
@@ -19,6 +20,9 @@ export class User extends BaseEntity{
     @Column()
     @UpdateDateColumn()
     updatedAt: Date;
+
+    @OneToMany(()=>Wallet, (wallet)=>wallet.user)
+    wallets: Wallet[];  
 
     @BeforeInsert()
     async hashPassword(){

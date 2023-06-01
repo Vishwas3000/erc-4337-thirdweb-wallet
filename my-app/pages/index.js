@@ -2,14 +2,48 @@ import Image from "next/image"
 import { Inter } from "next/font/google"
 import { Web3Button, useAddress } from "@thirdweb-dev/react"
 import { nftMarketplaceAbi, contractAddress } from "../constants"
-import { useState } from "react"
+import { useState, useEffect, useContext } from "react"
+import { UserContext } from "./_app"
 
 export default function Home() {
   const [tokenId, setTokenId] = useState(0)
+  const { user } = useContext(UserContext)
   const NFTAddress = contractAddress["NFTMarketplace"]
 
   const address = useAddress()
   console.log("address: ", address)
+  console.log("user: ", user)
+
+  const handleAddWallet = async () => {
+    console.log("adding wallet to backend")
+    const data = {
+      wallet_address: address,
+      wallet_name: "some Wallet",
+      user_mail_id: user,
+    }
+
+    const req = await fetch("http://localhost:3000/wallet/create", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+
+    const res = await req.json()
+    console.log(res)
+    if (res.status == 201) {
+      const { email, id } = res
+      alert("Wallet Added")
+      return { respond: req.status, message: "success" }
+    } else {
+      return { respond: req.status, message: res.message }
+    }
+  }
+
+  useEffect(() => {
+    handleAddWallet()
+  }, [address, user])
 
   return (
     <div className="flex flex-col justify-center w-1/6 p-5">

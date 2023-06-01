@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, HttpCode, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UsePipes, ValidationPipe } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 
@@ -7,10 +7,8 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('/create')
-  @HttpCode(200)
-  // @UsePipes(ValidationPipe)
+  @UsePipes(ValidationPipe)
   async createUser(@Body() userData: CreateUserDto) {
-    console.log('userData', userData);
     return await this.userService.createUser(userData);
   }
 
@@ -18,5 +16,4 @@ export class UserController {
   showById(@Param('id') id: number) {
     return this.userService.showById(id);
   }
-
 }

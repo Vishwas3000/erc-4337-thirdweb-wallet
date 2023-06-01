@@ -10,6 +10,7 @@ export class AuthService {
     constructor(private usersService:UserService, private jwtService:JwtService){}
 
     async login(authLoginDto: AuthLoginDto) {
+      console.log("auth: ",authLoginDto)
         const user = await this.validateUser(authLoginDto);
     
         const payload = {
@@ -23,10 +24,9 @@ export class AuthService {
     
       async validateUser(authLoginDto: AuthLoginDto): Promise<User> {
         const { email, password } = authLoginDto;
-        const hashedPassword = await this.usersService.hashPassword(password);
         
         const user = await this.usersService.findByEmail(email);
-        if (!(await user?.validatePassword(hashedPassword))) {
+        if (!(await user?.validatePassword(password))) {
           throw new UnauthorizedException();
         }
     
