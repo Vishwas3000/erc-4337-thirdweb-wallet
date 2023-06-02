@@ -1,5 +1,4 @@
-import { SmartWallet } from "@ethers-ancillary/contracts"
-
+import { SmartWallet } from "@thirdweb-dev/wallets"
 const createSmartWalletUtil = async ({
   presonalWallet,
   activeChain,
@@ -18,7 +17,7 @@ const createSmartWalletUtil = async ({
   })
 
   const smartWalletAddress = await smartWallet.getAddress()
-  console.log(`✨ Smart wallet address: ${smartWalletAddress}`)
+  console.log(`Smart wallet address: ${smartWalletAddress}`)
   return smartWallet
 }
 

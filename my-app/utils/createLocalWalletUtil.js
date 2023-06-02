@@ -1,6 +1,6 @@
-import { LocalWallet } from "@ethersproject/wallet"
+import { LocalWallet } from "@thirdweb-dev/wallets"
 
-const createLocalWalletUtil = async (password) => {
+const createLocalWalletUtil = async ({ password }) => {
   // Create a local wallet to be a key for smart wallet
   const localWallet = new LocalWallet()
 

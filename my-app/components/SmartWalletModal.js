@@ -1,9 +1,21 @@
-import { useState, useEffect, useContext } from "react"
+import { useState, useContext } from "react"
 import { UserContext } from "@/pages/_app"
-import SmartWalletModal from "./SmartWalletModal"
+import createLocalWalletUtil from "@/utils/createLocalWalletUtil"
+import createSmartWalletUtil from "@/utils/createSmartWalletUtil"
 
-export default function WalletModal({ closePopup, displaySmartWalletModal }) {
-  const { setWalletType: setWalletTypeContext } = useContext(UserContext)
+export default function SmartWalletModal({ closePopup, localWalletModal }) {
+  const { setEOA } = useContext(UserContext)
+  const [password, setPassword] = useState("")
+
+  const handleSmartWalletMetamask = () => {
+    setEOA("metamask")
+    closePopup()
+  }
+  const handleSmartWalletLocalWallet = () => {
+    setEOA("localWallet")
+    localWalletModal()
+    closePopup()
+  }
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 bg-gray-500 backdrop-filter backdrop-blur-sm">
@@ -15,22 +27,18 @@ export default function WalletModal({ closePopup, displaySmartWalletModal }) {
           <button
             className="bg-white text-blue-500 py-2 px-4 rounded-lg"
             onClick={() => {
-              setWalletTypeContext("metamask")
-              alert("metamask implement is not done yet")
-              closePopup()
+              handleSmartWalletMetamask()
             }}
           >
             Metamask
           </button>
           <button
-            className="bg-white text-blue-500 py-2 px-4 rounded-lg"
+            className="bg-white text-blue-500 py-2 px-4 rounded-lg "
             onClick={() => {
-              setWalletTypeContext("smartWallet")
-              displaySmartWalletModal()
-              closePopup()
+              handleSmartWalletLocalWallet()
             }}
           >
-            Smart Wallet
+            Local wallet
           </button>
         </div>
       </div>
