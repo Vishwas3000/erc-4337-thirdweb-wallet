@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@thirdweb-dev/react": "^3.12.2",
+    "@thirdweb-dev/react": "^3.11.11",
     "@thirdweb-dev/wallets": "^0.2.22",
     "autoprefixer": "10.4.14",
     "next": "13.4.4",

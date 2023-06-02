@@ -30,10 +30,10 @@ export default function Home() {
       },
     })
 
+    console.log(req)
     const res = await req.json()
     console.log(res)
     if (res.status == 201) {
-      const { email, id } = res
       alert("Wallet Added")
       return { respond: req.status, message: "success" }
     } else {
@@ -42,7 +42,7 @@ export default function Home() {
   }
 
   useEffect(() => {
-    handleAddWallet()
+    if (address) handleAddWallet()
   }, [address, user])
 
   return (

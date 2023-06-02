@@ -7,7 +7,8 @@ export default function LoginPopup({ closePopup }) {
   const [password, setPassword] = useState("")
 
   const handleLogin = async () => {
-    console.log("handleLogin")
+    console.log("handleLogin: ", emailId)
+    changeUser(emailId)
     const data = {
       email: emailId,
       password: password,
@@ -26,7 +27,6 @@ export default function LoginPopup({ closePopup }) {
     const res = await req.json()
     console.log(res)
     if (res.status == 201) {
-      changeUser(emailId)
       return { respond: req.status, message: "success" }
     } else {
       return { respond: req.status, message: res.message }

@@ -12,6 +12,7 @@ const SignInPopup = ({ closePopup }) => {
       email: emailId,
       password: password,
     }
+    changeUser(emailId)
     console.log(data)
     const req = await fetch("http://localhost:3000/user/create", {
       method: "POST",
@@ -24,7 +25,6 @@ const SignInPopup = ({ closePopup }) => {
     const res = await req.json()
     console.log(res)
     if (res.status == 201) {
-      changeUser(emailId)
       return { respond: req.status, message: "success" }
     } else {
       return { respond: req.status, message: res.message }

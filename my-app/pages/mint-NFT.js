@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useAddress, Web3Button } from "@thirdweb-dev/react"
+import { useAddress, Web3Button, useWallet } from "@thirdweb-dev/react"
 // import { Button, Upload, Input, useNotification } from "web3uikit"
 // import { MintNftUtil, GetTokenCounterUtil } from "../utils/NftUtils"
 // import { useMoralis, useWeb3Contract } from "react-moralis"
@@ -25,12 +25,8 @@ export default function MintNFT() {
   const [isMinting, setIsMinting] = useState(false)
   const [currentTokenCount, setCurrentTokenCount] = useState(0)
 
-  const nftAddress = contractAddress["NFT"]
-  console.log("nftAddress: ", nftAddress)
-
-  //   useEffect(() => {
-  //     GetTokenId()
-  //   }, [isWeb3Enabled, chainId, isMinting])
+  const wallet = useWallet()
+  console.log("wallet: ", wallet)
 
   const rename = (name) => {
     let temp = name
@@ -153,14 +149,6 @@ export default function MintNFT() {
     return tokenUri
   }
 
-  //   const GetTokenId = async () => {
-  //     const tokenCount = await GetTokenCounterUtil(
-  //       nftAddress,
-  //       runContractFunction
-  //     )
-  //     setCurrentTokenCount(tokenCount)
-  //   }
-
   const onIpfsSuccess = async (data) => {
     console.log("IPFS success")
     console.log(data)
@@ -174,33 +162,12 @@ export default function MintNFT() {
     alert("Your NFT has not been uploaded to IPFS")
   }
 
-  //   const onMintSuccess = async (tx) => {
-  //     tx.wait(BLOCK_WAIT_TIME)
-  //     console.log("Minted successfully")
-  //     dispatch({
-  //       type: "success",
-  //       title: "Minted successfully",
-  //       position: "topR",
-  //       message: `Your NFT successfully minted ID: ${currentTokenCount}`,
-  //     })
-  //     setIsMinting(false)
-  //   }
   const onMintSuccess = async () => {
     console.log("Minted successfully")
     alert("Minted successfully")
     setIsMinting(false)
   }
 
-  //   const onMintFailed = async (tx) => {
-  //     console.log("Minting failed")
-  //     dispatch({
-  //       type: "error",
-  //       title: "Minting failed",
-  //       position: "topR",
-  //       message: "Your NFT has not been minted",
-  //     })
-  //     setIsMinting(false)
-  //   }
   const onMintFailed = async () => {
     console.log("Minting failed")
     alert("Minting failed")
@@ -256,9 +223,8 @@ export default function MintNFT() {
           contractAbi={nftAbi}
           action={async (contract) => {
             console.log(" :", contract)
-            // const tokenUri = await handleMintToken()
-            const tokenUri =
-              "ipfs://bafkreics2jesmdzv6seaq7chfsxvfujfvorgflygglwhuleqivsdwnilcy"
+            const tokenUri = await handleMintToken()
+
             const data = await contract.call("mintNFT", [tokenUri])
             console.log("data: ", data)
           }}
