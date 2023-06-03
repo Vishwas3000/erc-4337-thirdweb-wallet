@@ -6,16 +6,17 @@ import { typeOrmConfigAsync } from './config/typeorm.config';
 import { ConfigModule } from '@nestjs/config/dist';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
-import { MintEntryModule } from './mint-entry/mint-entry.module';
+
 import { LocalWalletModule } from './local-wallet/local-wallet.module';
 import { SmartWalletModule } from './smart-wallet/smart-wallet.module';
+import { TransactionModule } from './transaction/transaction.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRootAsync(typeOrmConfigAsync), 
     ConfigModule.forRoot({isGlobal: true}), 
     UserModule, 
-    AuthModule, MintEntryModule, LocalWalletModule, SmartWalletModule,
+    AuthModule, LocalWalletModule, SmartWalletModule, TransactionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

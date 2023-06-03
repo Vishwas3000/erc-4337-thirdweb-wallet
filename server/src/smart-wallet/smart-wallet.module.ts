@@ -8,6 +8,7 @@ import { SmartWallet } from './smart-wallet.entity';
 @Module({
   controllers: [SmartWalletController],
   providers: [SmartWalletService],
-  imports : [LocalWalletModule, TypeOrmModule.forFeature([SmartWallet])]
+  imports : [LocalWalletModule, TypeOrmModule.forFeature([SmartWallet])],
+  exports: [SmartWalletService]
 })
 export class SmartWalletModule {}

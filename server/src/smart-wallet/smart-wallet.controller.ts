@@ -12,6 +12,7 @@ export class SmartWalletController {
   @UsePipes(ValidationPipe)
   async saveSmartWallet(@Body() wallet:CreateSmartWalletDto){
     const localWallet = await this.localWalletService.getLocalWalletByAddress(wallet.local_wallet_address);
+    
     return await this.smartWalletService.createSmartWallet(wallet, localWallet);
   }
 }

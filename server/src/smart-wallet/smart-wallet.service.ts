@@ -19,4 +19,14 @@ export class SmartWalletService {
         await local_wallet.save();
         return newSmartWallet;
     }
+
+    async getSmartWalletByAddress(wallet_address: string): Promise<SmartWallet>{
+        return await this.smartWalletRepository.findOne(
+            {
+                where:{
+                    wallet_address: wallet_address
+                },
+                relations:{transactions:true}
+            })
+    }
 }

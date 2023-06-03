@@ -2,7 +2,7 @@ import "@/styles/globals.css"
 import { ThirdwebProvider } from "@thirdweb-dev/react"
 import Header from "../components/Header"
 import CredentialPopup from "@/components/credentialPopup"
-import { useState, createContext } from "react"
+import { useState, createContext, useEffect } from "react"
 import ConnectWallet from "@/components/Connect"
 
 export const UserContext = createContext({
@@ -26,9 +26,13 @@ export default function App({ Component, pageProps }) {
   const [isEOAConnected, setIsEOAConnected] = useState()
 
   const changeUser = (newUser) => {
-    console.log("newUser: ", newUser)
+    // console.log("newUser: ", newUser)
     setUser(newUser)
   }
+
+  useEffect(() => {
+    console.log("smartWallet has been changed: ", smartWallet)
+  }, [smartWallet])
 
   const [isCredentialPopupOpen, setIsCredentialPopupOpen] = useState(true)
 
@@ -56,14 +60,14 @@ export default function App({ Component, pageProps }) {
           )}
         </div>
         <div className="">
-          <ThirdwebProvider>
+          <div>
             <Header />
             <div className=" p-5">
               <ConnectWallet />
             </div>
 
             <Component {...pageProps} />
-          </ThirdwebProvider>
+          </div>
         </div>
       </UserContext.Provider>
     </div>

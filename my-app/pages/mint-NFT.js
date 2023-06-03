@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react"
-import { useAddress, Web3Button, useWallet } from "@thirdweb-dev/react"
-// import { Button, Upload, Input, useNotification } from "web3uikit"
-// import { MintNftUtil, GetTokenCounterUtil } from "../utils/NftUtils"
-// import { useMoralis, useWeb3Contract } from "react-moralis"
-import { contractAddress, BLOCK_WAIT_TIME, nftAbi } from "../constants"
+import { useContext, useState, useEffect } from "react"
+import { CreateMintNftTransaction } from "@/utils/createTransaction"
+import { UserContext } from "./_app"
+import { ethers } from "ethers"
+
 import axios from "axios"
+import { contractAddress, nftAbi } from "@/constants"
 
 const metadataTemplate = {
   name: "",
@@ -13,20 +13,61 @@ const metadataTemplate = {
 }
 
 export default function MintNFT() {
-  //   const { isWeb3Enabled, account, chainId } = useMoralis()
-  //   const { runContractFunction } = useWeb3Contract()
-  //   const dispatch = useNotification()
-
-  const address = useAddress()
-
   const [image, setImage] = useState(null)
   const [nftName, setNftName] = useState("")
   const [nftDescription, setNftDescription] = useState("")
   const [isMinting, setIsMinting] = useState(false)
-  const [currentTokenCount, setCurrentTokenCount] = useState(0)
 
-  const wallet = useWallet()
-  console.log("wallet: ", wallet)
+  const { smartWallet } = useContext(UserContext)
+
+  const handleListenEvent = async () => {
+    const provider = new ethers.providers.JsonRpcProvider(
+      process.env.NEXT_PUBLIC_MUMBAI_RPC_URL
+    )
+
+    const contractInst = new ethers.Contract(
+      contractAddress["NFT"],
+      nftAbi,
+      provider
+    )
+
+    const filter = contractInst.filters.NFTMinted()
+    provider.on(filter, (data) => {
+      console.log("NFTMinted event emitted: ", data)
+    })
+    const transactionHash = data.transactionHash
+    const createdSmartWalletAddress = ethers.utils.getAddress(data.topics[1])
+    const tokenId = parseInt(data.topics[2], 16)
+
+    handleSendTransactionToServer(
+      transactionHash,
+      createdSmartWalletAddress,
+      {
+        tokenId: tokenId,
+      },
+      "mintNFT"
+    )
+  }
+
+  const handleSendTransactionToServer = async (
+    transactionHash,
+    smartWalletAddress,
+    transaction_data,
+    functionName
+  ) => {
+    const data = {
+      transaction_hash: transactionHash,
+      smart_wallet_address: smartWalletAddress,
+      function_called: functionName,
+      transaction_data: transaction_data,
+    }
+
+    const req = await fetch()
+  }
+
+  useEffect(() => {
+    handleListenEvent()
+  }, [])
 
   const rename = (name) => {
     let temp = name
@@ -218,23 +259,22 @@ export default function MintNFT() {
         />
       </div>
       <div className=" py-10">
-        <Web3Button
-          contractAddress={contractAddress["NFT"]}
-          contractAbi={nftAbi}
-          action={async (contract) => {
-            console.log(" :", contract)
-            const tokenUri = await handleMintToken()
-
-            const data = await contract.call("mintNFT", [tokenUri])
-            console.log("data: ", data)
+        <button
+          className="rounded-lg bg-blue-500 text-white py-2 px-8 hover:bg-blue-600"
+          onClick={async () => {
+            console.log("passing smart wallet: ", smartWallet)
+            // const tokenUri = await handleMintToken()
+            const tokenUri =
+              "ipfs://bafkreibyaufkzgpgu7ybwixq3iewx7ng3catq7svmrue4qbxn4paq2ke5i"
+            await CreateMintNftTransaction({
+              tokenUri,
+              smartWallet,
+            })
           }}
-          onSuccess={async () => {
-            alert("Claim successful!")
-          }}
-          isDisabled={isMinting}
         >
-          Mint!
-        </Web3Button>
+          Mint
+        </button>
+        <button onClick={() => {}}>Check</button>
       </div>
     </div>
   )

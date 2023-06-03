@@ -13,8 +13,6 @@ export default function LocalWalletModal({ closePopup }) {
   const handelGenerateSmartWallet = async (personalWallet) => {
     console.log("personal wallet: ", personalWallet)
     const newSmartWallet = await createSmartWalletUtil({
-      activeChain: Mumbai,
-      contractAddress: contractAddress["FactoryAddress"],
       presonalWallet: personalWallet,
     })
 
@@ -35,7 +33,7 @@ export default function LocalWalletModal({ closePopup }) {
 
     console.log("Upload smart account", req)
     const res = await req.json()
-    console.log(res)
+    console.log("result of server: ", res)
   }
 
   const handelGenerateLocalWallet = async () => {
@@ -85,15 +83,18 @@ export default function LocalWalletModal({ closePopup }) {
             className="rounded-lg px-4 py-2 border border-gray-300 focus:outline-none focus:border-blue-500 text-black"
           />
         </div>
-        <button
-          className="bg-white text-blue-500 py-2 px-4 rounded-lg"
-          onClick={() => {
-            closePopup()
-            handelGenerateLocalWallet()
-          }}
-        >
-          General Wallet
-        </button>
+        <div className=" flex flex-row justify-around">
+          <button
+            className="bg-white text-blue-500 py-2 px-4 rounded-lg"
+            onClick={() => {
+              closePopup()
+              handelGenerateLocalWallet()
+            }}
+          >
+            General Wallet
+          </button>
+          <button>Load Wallet</button>
+        </div>
       </div>
     </div>
   )
