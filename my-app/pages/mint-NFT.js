@@ -34,19 +34,19 @@ export default function MintNFT() {
     const filter = contractInst.filters.NFTMinted()
     provider.on(filter, (data) => {
       console.log("NFTMinted event emitted: ", data)
-    })
-    const transactionHash = data.transactionHash
-    const createdSmartWalletAddress = ethers.utils.getAddress(data.topics[1])
-    const tokenId = parseInt(data.topics[2], 16)
+      const transactionHash = data.transactionHash
+      const createdSmartWalletAddress = ethers.utils.getAddress(
+        `0x${data.topics[1].slice(26)}`
+      )
+      const tokenId = parseInt(data.topics[2], 16)
 
-    handleSendTransactionToServer(
-      transactionHash,
-      createdSmartWalletAddress,
-      {
-        tokenId: tokenId,
-      },
-      "mintNFT"
-    )
+      handleSendTransactionToServer(
+        transactionHash,
+        createdSmartWalletAddress,
+        { tokenId: tokenId },
+        "mintNFT"
+      )
+    })
   }
 
   const handleSendTransactionToServer = async (
@@ -62,7 +62,15 @@ export default function MintNFT() {
       transaction_data: transaction_data,
     }
 
-    const req = await fetch()
+    const req = await fetch("http://localhost:3000/transaction/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+
+    const res = await req.json()
   }
 
   useEffect(() => {
@@ -261,20 +269,25 @@ export default function MintNFT() {
       <div className=" py-10">
         <button
           className="rounded-lg bg-blue-500 text-white py-2 px-8 hover:bg-blue-600"
+          disabled={isMinting}
           onClick={async () => {
+            setIsMinting(true)
             console.log("passing smart wallet: ", smartWallet)
             // const tokenUri = await handleMintToken()
             const tokenUri =
               "ipfs://bafkreibyaufkzgpgu7ybwixq3iewx7ng3catq7svmrue4qbxn4paq2ke5i"
-            await CreateMintNftTransaction({
+            const { status } = await CreateMintNftTransaction({
               tokenUri,
               smartWallet,
             })
+            if (status === 201) {
+              alert("Minted successfully")
+            }
+            setIsMinting(false)
           }}
         >
           Mint
         </button>
-        <button onClick={() => {}}>Check</button>
       </div>
     </div>
   )
