@@ -2,16 +2,13 @@ import Image from "next/image"
 import { Inter } from "next/font/google"
 import { Web3Button, useAddress } from "@thirdweb-dev/react"
 import { nftMarketplaceAbi, contractAddress } from "../constants"
-import { useState } from "react"
-
-const inter = Inter({ subsets: ["latin"] })
+import { useState, useEffect, useContext } from "react"
+import { UserContext } from "./_app"
 
 export default function Home() {
   const [tokenId, setTokenId] = useState(0)
+  const { user, EOA } = useContext(UserContext)
   const NFTAddress = contractAddress["NFTMarketplace"]
-
-  const address = useAddress()
-  console.log("address: ", address)
 
   return (
     <div className="flex flex-col justify-center w-1/6 p-5">

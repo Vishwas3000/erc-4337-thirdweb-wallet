@@ -1,54 +1,75 @@
 import "@/styles/globals.css"
-import { Mumbai } from "@thirdweb-dev/chains"
-import {
-  ThirdwebProvider,
-  smartWallet,
-  localWallet,
-  metamaskWallet,
-  coinbaseWallet,
-  paperWallet,
-  ConnectWallet,
-} from "@thirdweb-dev/react"
+import { ThirdwebProvider } from "@thirdweb-dev/react"
 import Header from "../components/Header"
-import { contractAddress } from "@/constants"
+import CredentialPopup from "@/components/credentialPopup"
+import { useState, createContext, useEffect } from "react"
+import ConnectWallet from "@/components/Connect"
+
+export const UserContext = createContext({
+  user: "",
+  setUser: (newUser) => {},
+  smartWallet: null,
+  setSmartWallet: (newSmartWallet) => {},
+  EOA: null, // EOA = External Owned Account that used as the key to the smart wallet
+  setEOA: (newEOA) => {},
+  walletType: "", // walletType = "metamask" | "smart wallet"
+  setWalletType: (newWalletType) => {},
+  isEOAConnected: false,
+  setIsEOAConnected: (newIsEOAConnected) => {},
+})
 
 export default function App({ Component, pageProps }) {
+  const [user, setUser] = useState()
+  const [smartWallet, setSmartWallet] = useState()
+  const [EOA, setEOA] = useState()
+  const [walletType, setWalletType] = useState()
+  const [isEOAConnected, setIsEOAConnected] = useState()
+
+  const changeUser = (newUser) => {
+    // console.log("newUser: ", newUser)
+    setUser(newUser)
+  }
+
+  useEffect(() => {
+    console.log("smartWallet has been changed: ", smartWallet)
+  }, [smartWallet])
+
+  const [isCredentialPopupOpen, setIsCredentialPopupOpen] = useState(true)
+
   return (
     <div>
-      <ThirdwebProvider
-        autoConnect={false}
-        activeChain={Mumbai}
-        supportedWallets={[
-          smartWallet({
-            gasless: true,
-            factoryAddress: contractAddress["FactoryAddress"],
-            thirdwebApiKey: process.env.NEXT_PUBLIC_THIRDWEB_API_KEY,
-            chain: Mumbai,
-            personalWallets: [
-              metamaskWallet(),
-              localWallet({ persist: true }),
-              coinbaseWallet(),
-              paperWallet({
-                clientId: process.env.NEXT_PUBLIC_PAPER_WALLET_API_KEY,
-              }),
-            ],
-          }),
-          localWallet({ persist: true }),
-          metamaskWallet(),
-        ]}
-        sdkOptions={{
-          gasless: {
-            openzeppelin: {
-              relayerUrl: process.env.NEXT_PUBLIC_RELAYER_URL,
-            },
-          },
+      <UserContext.Provider
+        value={{
+          user,
+          changeUser,
+          smartWallet,
+          setSmartWallet,
+          EOA,
+          setEOA,
+          walletType,
+          setWalletType,
+          isEOAConnected,
+          setIsEOAConnected,
         }}
       >
-        <Header />
-        <ConnectWallet />
+        <div>
+          {isCredentialPopupOpen && (
+            <CredentialPopup
+              closePopup={() => setIsCredentialPopupOpen(false)}
+            />
+          )}
+        </div>
+        <div className="">
+          <div>
+            <Header />
+            <div className=" p-5">
+              <ConnectWallet />
+            </div>
 
-        <Component {...pageProps} />
-      </ThirdwebProvider>
+            <Component {...pageProps} />
+          </div>
+        </div>
+      </UserContext.Provider>
     </div>
   )
 }
