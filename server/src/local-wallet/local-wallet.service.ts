@@ -21,6 +21,10 @@ export class LocalWalletService {
     }
 
     getLocalWalletById(id: number):Promise<LocalWallet>{
-        return this.localWalletRepository.findOneBy({id:id});
+        return this.localWalletRepository.findOne({where:{id:id}, relations:{smart_wallets:true}});
+    }
+
+    getLocalWalletByAddress(wallet_address: string):Promise<LocalWallet>{
+        return this.localWalletRepository.findOne({where:{wallet_address:wallet_address}, relations:{smart_wallets:true}})
     }
 }

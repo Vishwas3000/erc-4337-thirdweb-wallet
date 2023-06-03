@@ -5,9 +5,11 @@ import { UserModule } from 'src/user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LocalWallet } from './local-wallet.entity';
 
+
 @Module({
   controllers: [LocalWalletController],
   providers: [LocalWalletService],
   imports: [UserModule, TypeOrmModule.forFeature([LocalWallet])],
+  exports: [LocalWalletService]
 })
 export class LocalWalletModule {}

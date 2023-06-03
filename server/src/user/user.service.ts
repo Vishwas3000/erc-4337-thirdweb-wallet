@@ -27,12 +27,12 @@ export class UserService {
     }
 
     async getUserByMail(email: string): Promise<User>{
-        const user = await this.userRepository.findOne({where:{email:email}, relations:{wallets:true}});
+        const user = await this.userRepository.findOne({where:{email:email}, relations:{ local_wallets:true}});
         return user;
     }
 
     async getUserById(id: number): Promise<User>{
-        const user = await this.userRepository.findOne({where:{id:id}, relations:{wallets:true}});
+        const user = await this.userRepository.findOne({where:{id:id}, relations:{local_wallets:true}});
         return user;
     }
 

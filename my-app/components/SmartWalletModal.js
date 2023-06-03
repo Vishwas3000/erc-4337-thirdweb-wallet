@@ -1,18 +1,16 @@
 import { useState, useContext } from "react"
 import { UserContext } from "@/pages/_app"
-import createLocalWalletUtil from "@/utils/createLocalWalletUtil"
-import createSmartWalletUtil from "@/utils/createSmartWalletUtil"
 
 export default function SmartWalletModal({ closePopup, localWalletModal }) {
-  const { setEOA } = useContext(UserContext)
+  const { setEOA, setWalletType } = useContext(UserContext)
   const [password, setPassword] = useState("")
 
   const handleSmartWalletMetamask = () => {
-    setEOA("metamask")
+    setWalletType("metamask")
     closePopup()
   }
   const handleSmartWalletLocalWallet = () => {
-    setEOA("localWallet")
+    setWalletType("localWallet")
     localWalletModal()
     closePopup()
   }

@@ -7,7 +7,6 @@ import { ConfigModule } from '@nestjs/config/dist';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { MintEntryModule } from './mint-entry/mint-entry.module';
-import { WalletModule } from './wallet/wallet.module';
 import { LocalWalletModule } from './local-wallet/local-wallet.module';
 import { SmartWalletModule } from './smart-wallet/smart-wallet.module';
 
@@ -16,7 +15,7 @@ import { SmartWalletModule } from './smart-wallet/smart-wallet.module';
     TypeOrmModule.forRootAsync(typeOrmConfigAsync), 
     ConfigModule.forRoot({isGlobal: true}), 
     UserModule, 
-    AuthModule, MintEntryModule, WalletModule, LocalWalletModule, SmartWalletModule,
+    AuthModule, MintEntryModule, LocalWalletModule, SmartWalletModule,
   ],
   controllers: [AppController],
   providers: [AppService],

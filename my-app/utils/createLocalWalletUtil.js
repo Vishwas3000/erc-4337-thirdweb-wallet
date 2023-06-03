@@ -4,7 +4,11 @@ const createLocalWalletUtil = async ({ password }) => {
   // Create a local wallet to be a key for smart wallet
   const localWallet = new LocalWallet()
 
-  await localWallet.generate()
+  // await localWallet.generate()
+  await localWallet.loadOrCreate({
+    strategy: "encryptedJson",
+    password: password,
+  })
 
   const localWalletAddress = await localWallet.getAddress()
   console.log(`✨ Local wallet address: ${localWalletAddress}`)
@@ -16,8 +20,11 @@ const createLocalWalletUtil = async ({ password }) => {
     strategy: "privateKey",
     password: password,
   })
-  console.log("jsonData: ", JSON.parse(jsonData))
-  console.log("privateKey: ", privateKey)
+
+  localWallet.save({
+    encryption: "encryptedJson",
+    password: password,
+  })
 
   return {
     wallet: localWallet,

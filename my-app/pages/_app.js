@@ -1,15 +1,6 @@
 import "@/styles/globals.css"
-import { Mumbai } from "@thirdweb-dev/chains"
-import {
-  ThirdwebProvider,
-  smartWallet,
-  localWallet,
-  metamaskWallet,
-  coinbaseWallet,
-  paperWallet,
-} from "@thirdweb-dev/react"
+import { ThirdwebProvider } from "@thirdweb-dev/react"
 import Header from "../components/Header"
-import { contractAddress } from "@/constants"
 import CredentialPopup from "@/components/credentialPopup"
 import { useState, createContext } from "react"
 import ConnectWallet from "@/components/Connect"
@@ -19,10 +10,12 @@ export const UserContext = createContext({
   setUser: (newUser) => {},
   smartWallet: null,
   setSmartWallet: (newSmartWallet) => {},
-  EOA: "", // EOA = External Owned Account that used as the key to the smart wallet
+  EOA: null, // EOA = External Owned Account that used as the key to the smart wallet
   setEOA: (newEOA) => {},
   walletType: "", // walletType = "metamask" | "smart wallet"
   setWalletType: (newWalletType) => {},
+  isEOAConnected: false,
+  setIsEOAConnected: (newIsEOAConnected) => {},
 })
 
 export default function App({ Component, pageProps }) {
@@ -30,6 +23,7 @@ export default function App({ Component, pageProps }) {
   const [smartWallet, setSmartWallet] = useState()
   const [EOA, setEOA] = useState()
   const [walletType, setWalletType] = useState()
+  const [isEOAConnected, setIsEOAConnected] = useState()
 
   const changeUser = (newUser) => {
     console.log("newUser: ", newUser)
@@ -50,6 +44,8 @@ export default function App({ Component, pageProps }) {
           setEOA,
           walletType,
           setWalletType,
+          isEOAConnected,
+          setIsEOAConnected,
         }}
       >
         <div>
@@ -63,7 +59,6 @@ export default function App({ Component, pageProps }) {
           <ThirdwebProvider>
             <Header />
             <div className=" p-5">
-              {/* <ConnectWallet /> */}
               <ConnectWallet />
             </div>
 
