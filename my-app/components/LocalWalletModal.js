@@ -1,9 +1,10 @@
 import { UserContext } from "@/pages/_app"
 import { useContext, useEffect, useState } from "react"
-import createLocalWalletUtil from "@/utils/createLocalWalletUtil"
+import {
+  LoadLocalWalletUtil,
+  GenerateLocalWalletUtil,
+} from "../utils/createLocalWalletUtil"
 import createSmartWalletUtil from "@/utils/createSmartWalletUtil"
-import { Mumbai } from "@thirdweb-dev/chains"
-import { contractAddress } from "@/constants"
 
 export default function LocalWalletModal({ closePopup }) {
   const { user, setEOA, setSmartWallet } = useContext(UserContext)
@@ -36,13 +37,46 @@ export default function LocalWalletModal({ closePopup }) {
     console.log("result of server: ", res)
   }
 
-  const handelGenerateLocalWallet = async () => {
+  const handelLoadLocalWallet = async () => {
     const { jsonDataEncoded, privateKeyEncoded, wallet } =
-      await createLocalWalletUtil({
+      await LoadLocalWalletUtil({
         password,
       })
 
-    console.log("generated local wallet: ", wallet)
+    console.log("Loading local wallet: ", wallet)
+
+    setEOA(wallet)
+    setPersonalWallet(wallet)
+
+    // const data = {
+    //   wallet_address: await wallet.getAddress(),
+    //   user_mail_id: user,
+    //   wallet_encrypted_data: jsonDataEncoded,
+    // }
+    // console.log("data: ", data)
+    // const req = await fetch("http://localhost:3000/local-wallet/create", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(data),
+    // })
+    // console.log(req)
+    // const res = await req.json()
+    // console.log(res)
+
+    // if (req.status === 201) {
+    //   handelGenerateSmartWallet(wallet)
+    // }
+  }
+
+  const handelGenerateLocalWallet = async () => {
+    const { jsonDataEncoded, privateKeyEncoded, wallet } =
+      await GenerateLocalWalletUtil({
+        password,
+      })
+
+    console.log("Generating local wallet: ", wallet)
 
     setEOA(wallet)
     setPersonalWallet(wallet)
@@ -88,12 +122,20 @@ export default function LocalWalletModal({ closePopup }) {
             className="bg-white text-blue-500 py-2 px-4 rounded-lg"
             onClick={() => {
               closePopup()
+              handelLoadLocalWallet()
+            }}
+          >
+            Load Wallet
+          </button>
+          <button
+            className="bg-white text-blue-500 py-2 px-4 rounded-lg"
+            onClick={() => {
+              closePopup()
               handelGenerateLocalWallet()
             }}
           >
             General Wallet
           </button>
-          <button>Load Wallet</button>
         </div>
       </div>
     </div>

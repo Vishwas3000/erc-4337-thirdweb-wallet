@@ -7,7 +7,7 @@ export class LocalWallet extends BaseEntity{
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({unique: true})
     wallet_address: string;
 
     @ManyToOne(()=>User, (user)=>user.local_wallets)

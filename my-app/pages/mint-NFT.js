@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react"
+import { useContext, useState, useEffect, useRef } from "react"
 import { CreateMintNftTransaction } from "@/utils/createTransaction"
 import { UserContext } from "./_app"
 import { ethers } from "ethers"
@@ -17,6 +17,8 @@ export default function MintNFT() {
   const [nftName, setNftName] = useState("")
   const [nftDescription, setNftDescription] = useState("")
   const [isMinting, setIsMinting] = useState(false)
+
+  const isMounted = useRef(false)
 
   const { smartWallet } = useContext(UserContext)
 
@@ -74,7 +76,10 @@ export default function MintNFT() {
   }
 
   useEffect(() => {
-    handleListenEvent()
+    if (!isMounted.current) {
+      handleListenEvent()
+    }
+    isMounted.current = true
   }, [])
 
   const rename = (name) => {

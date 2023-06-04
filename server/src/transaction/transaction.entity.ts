@@ -10,7 +10,7 @@ export class Transaction extends BaseEntity{
     @CreateDateColumn()
     added_at: Date;
 
-    @Column()
+    @Column({unique: true})
     transaction_hash: string;
 
     @Column()
