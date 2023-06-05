@@ -1,6 +1,5 @@
 import { IsNotEmpty } from "class-validator";
 
-
 export class CreateSmartWalletDto {
     @IsNotEmpty()
     wallet_address: string;

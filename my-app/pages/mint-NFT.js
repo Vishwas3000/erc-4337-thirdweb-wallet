@@ -45,8 +45,14 @@ export default function MintNFT() {
       handleSendTransactionToServer(
         transactionHash,
         createdSmartWalletAddress,
-        { tokenId: tokenId },
+        { tokenId: tokenId, NFTAddress: contractAddress["NFT"] },
         "mintNFT"
+      )
+
+      handleSendMintNFTToServer(
+        tokenId,
+        createdSmartWalletAddress,
+        contractAddress["NFT"]
       )
     })
   }
@@ -73,6 +79,29 @@ export default function MintNFT() {
     })
 
     const res = await req.json()
+  }
+
+  const handleSendMintNFTToServer = async (
+    nftId,
+    smartWalletAddress,
+    nftAddress
+  ) => {
+    const data = {
+      id: nftId,
+      creator_address: smartWalletAddress,
+      nft_smart_contract_address: nftAddress,
+    }
+
+    const req = await fetch("http://localhost:3000/nft/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+
+    const res = await req.json()
+    console.log("result of nft creation upload: ", res)
   }
 
   useEffect(() => {
@@ -278,9 +307,9 @@ export default function MintNFT() {
           onClick={async () => {
             setIsMinting(true)
             console.log("passing smart wallet: ", smartWallet)
-            // const tokenUri = await handleMintToken()
-            const tokenUri =
-              "ipfs://bafkreibyaufkzgpgu7ybwixq3iewx7ng3catq7svmrue4qbxn4paq2ke5i"
+            const tokenUri = await handleMintToken()
+            // const tokenUri =
+            //   "ipfs://bafkreiem5x4n5puiewrwo33v2ychs5t66q2m66jcmgsgok6eecpl4ck43u"
             const { status } = await CreateMintNftTransaction({
               tokenUri,
               smartWallet,

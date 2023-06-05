@@ -4,6 +4,7 @@ import { LocalWallet } from './local-wallet.entity';
 import { LocalWalletRepository } from './local-wallet.repository';
 import { User } from 'src/user/user.entity';
 import { CreateLocalWalletDto } from './dto/create-local-wallet.dto';
+import { SmartWallet } from 'src/smart-wallet/smart-wallet.entity';
 
 @Injectable()
 export class LocalWalletService {
@@ -26,5 +27,11 @@ export class LocalWalletService {
 
     getLocalWalletByAddress(wallet_address: string):Promise<LocalWallet>{
         return this.localWalletRepository.findOne({where:{wallet_address:wallet_address}, relations:{smart_wallets:true}})
+    }
+
+    getSmartWalletsByLocalWalletAddress(wallet_address: string):Promise<SmartWallet[]>{
+        return this.localWalletRepository.findOne({where:{wallet_address:wallet_address}, relations:{smart_wallets:true}}).then((localWallet)=>{
+            return localWallet.smart_wallets;
+        })
     }
 }

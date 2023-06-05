@@ -4,6 +4,7 @@ import { SmartWallet } from './smart-wallet.entity';
 import { SmartWalletRepository } from './smart-wallet.repository';
 import { CreateSmartWalletDto } from './dto/create-smart-wallert.dto';
 import { LocalWallet } from 'src/local-wallet/local-wallet.entity';
+import { Nft } from 'src/nft/nft.entity';
 
 @Injectable()
 export class SmartWalletService {
@@ -26,7 +27,12 @@ export class SmartWalletService {
                 where:{
                     wallet_address: wallet_address
                 },
-                relations:{transactions:true}
+                relations:{transactions:true, nfts_created:true, nfts_owned:true}
             })
+    }
+
+    async getAllNftsOwned(wallet_address: string): Promise<Nft[]>{
+        const smartWallet = await this.smartWalletRepository.findOne({where:{wallet_address:wallet_address}, relations:{nfts_owned:true}});
+        return smartWallet.nfts_owned;
     }
 }

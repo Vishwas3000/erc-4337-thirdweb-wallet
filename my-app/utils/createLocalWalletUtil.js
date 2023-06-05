@@ -3,7 +3,7 @@ import { LocalWallet } from "@thirdweb-dev/wallets"
 const LoadLocalWalletUtil = async ({ password }) => {
   const localWallet = new LocalWallet()
 
-  await localWallet.loadOrCreate({
+  await localWallet.load({
     strategy: "encryptedJson",
     password: password,
   })

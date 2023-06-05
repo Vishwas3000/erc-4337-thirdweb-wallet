@@ -16,7 +16,7 @@ export default function LocalWalletModal({ closePopup }) {
     const newSmartWallet = await createSmartWalletUtil({
       presonalWallet: personalWallet,
     })
-
+    console.log("new smart wallet: ", newSmartWallet)
     setSmartWallet(newSmartWallet)
 
     const data = {
@@ -48,26 +48,24 @@ export default function LocalWalletModal({ closePopup }) {
     setEOA(wallet)
     setPersonalWallet(wallet)
 
-    // const data = {
-    //   wallet_address: await wallet.getAddress(),
-    //   user_mail_id: user,
-    //   wallet_encrypted_data: jsonDataEncoded,
-    // }
-    // console.log("data: ", data)
-    // const req = await fetch("http://localhost:3000/local-wallet/create", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(data),
-    // })
-    // console.log(req)
-    // const res = await req.json()
-    // console.log(res)
+    const data = {
+      wallet_address: await wallet.getAddress(),
+      user_mail_id: user,
+      wallet_encrypted_data: jsonDataEncoded,
+    }
+    console.log("data: ", data)
+    const req = await fetch("http://localhost:3000/local-wallet/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+    console.log(req)
+    const res = await req.json()
+    console.log(res)
 
-    // if (req.status === 201) {
-    //   handelGenerateSmartWallet(wallet)
-    // }
+    handelGenerateSmartWallet(wallet)
   }
 
   const handelGenerateLocalWallet = async () => {

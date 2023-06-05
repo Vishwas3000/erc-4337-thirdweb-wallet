@@ -25,7 +25,6 @@ export default function ConnectWallet() {
   }
 
   useEffect(() => {
-    console.log("EOA is connected: ", EOA)
     if (EOA) {
       setIsEOAConnected(true)
       handleDisplayDetails()
