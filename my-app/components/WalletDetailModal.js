@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react"
 import { UserContext } from "../pages/_app"
 import { truncateAddress } from "../utils/helpers"
 import Image from "next/image"
+import ClosePopup from "./closePopup"
 
 export default function WalletDetailModal({ closePopup }) {
   const { EOA, setEOA, setSmartWallet, setIsEOAConnected, setWalletType } =
@@ -65,25 +66,7 @@ export default function WalletDetailModal({ closePopup }) {
           <div className=" flex justify-center font-bold text-2xl flex-grow">
             Wallet options
           </div>
-          <button
-            className="bg-transparent text-white rounded-md p-1 hover:bg-blue-800"
-            onClick={closePopup}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              className="h-6 w-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
+          <ClosePopup closePopup={closePopup} />
         </div>
         <div className=" flex flex-row justify-around">
           <button

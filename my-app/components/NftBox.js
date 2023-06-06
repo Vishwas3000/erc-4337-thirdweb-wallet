@@ -50,9 +50,6 @@ export default function NftBox({
   }
 
   const getNftPrice = async () => {
-    console.log("nftMarketplaceAddress: ", nftMarketplaceAddress)
-    console.log("nftAddress: ", nftAddress)
-    console.log("tokenId: ", tokenId)
     const data = await GetListingUtil(
       nftMarketplaceAddress,
       nftAddress,
@@ -131,7 +128,7 @@ export default function NftBox({
             <p className="text-xs">{description}</p>
             {isOwnerUser ? (
               isListed ? (
-                <p className="text-xs italic">{priceData}</p>
+                <p className="text-xs italic">Price: {priceData}</p>
               ) : (
                 <p className="text-xs italic">unlisted</p>
               )

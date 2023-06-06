@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from "react"
 import { UserContext } from "../pages/_app"
-import { contractAddress, nftAbi, nftMarketplaceAbi } from "../constants"
+import { contractAddress } from "../constants"
 import NftBox from "../components/NftBox"
 
 export default function ListNFT() {
@@ -10,7 +10,7 @@ export default function ListNFT() {
   const handleGetNftOwnedByUser = async () => {
     console.log("smartWallet: ", smartWallet)
     if (!smartWallet) {
-      const address = await EOA.getAddress()
+      const address = await smartWallet.getAddress()
       const req = await fetch(
         `http://localhost:3000/smart-wallet/nfts/${address}`,
         {
@@ -71,6 +71,7 @@ export default function ListNFT() {
               tokenId={nft.id}
               key={`${nft.nftAddress}${nft.id}`}
               isListed={nft.isListed}
+              nftMarketplaceAddress={contractAddress["NFTMarketplace"]}
             />
           ))}
         </div>
