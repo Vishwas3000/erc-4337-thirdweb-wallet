@@ -2,9 +2,19 @@ import { useState, useContext, useEffect } from "react"
 import { UserContext } from "@/pages/_app"
 import { GetTokenUriUtil } from "../utils/NftUtils"
 import Image from "next/image"
+import NftModal from "./NftModal"
 
-export default function NftBox({ nftAddress, tokenId, seller }) {
+export default function NftBox({
+  nftAddress,
+  tokenId,
+  seller,
+  price,
+  nftMarketplaceAddress,
+  isListed,
+}) {
   const { smartWallet } = useContext(UserContext)
+
+  console.log("isListed: ", isListed)
 
   const [imageUrl, setImageUrl] = useState("")
   const [name, setName] = useState("")
@@ -75,25 +85,38 @@ export default function NftBox({ nftAddress, tokenId, seller }) {
 
   return (
     <div>
-      <button
-        className="flex flex-col bg-gradient-to-br from-blue-100 to-blue-200 rounded-md p-4 w-52 h-72 items-center space-x-1 hover:bg-gradient-to-br hover:from-blue-200 hover:to-blue-300"
-        onClick={handelCardClick}
-      >
-        <div className="rounded-lg overflow-hidden">
-          <Image
-            loader={() => imageUrl}
-            src={imageUrl}
-            alt="Image Description"
-            width={200}
-            height={200}
+      <div>
+        {showModal && (
+          <NftModal
+            isListed={isListed}
+            smartWallet={smartWallet}
+            nftAddress={nftAddress}
+            tokenId={tokenId}
+            closeModal={() => setShowModal(false)}
           />
-        </div>
-        <div className="flex flex-col text-left py-1 text-slate-900 space-y-2">
-          <h3 className="font-bold text-base">Owned by: {displaySeller}</h3>
-          <p className="text-base">{name}</p>
-          <p className="text-xs">{description}</p>
-        </div>
-      </button>
+        )}
+      </div>
+      <div>
+        <button
+          className="flex flex-col bg-gradient-to-br from-blue-100 to-blue-200 rounded-md p-4 w-52 h-72 items-center space-x-1 hover:bg-gradient-to-br hover:from-blue-200 hover:to-blue-300"
+          onClick={handelCardClick}
+        >
+          <div className="rounded-lg overflow-hidden">
+            <Image
+              loader={() => imageUrl}
+              src={imageUrl}
+              alt="Image Description"
+              width={200}
+              height={200}
+            />
+          </div>
+          <div className="flex flex-col text-left py-1 text-slate-900 space-y-2">
+            <h3 className="font-bold text-base">Owned by: {displaySeller}</h3>
+            <p className="text-base">{name}</p>
+            <p className="text-xs">{description}</p>
+          </div>
+        </button>
+      </div>
     </div>
   )
 }

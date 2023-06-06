@@ -1,5 +1,4 @@
 import Link from "next/link"
-import { ConnectWallet } from "@thirdweb-dev/react"
 
 export default function Header() {
   return (
@@ -14,12 +13,6 @@ export default function Header() {
         </Link>
         <Link href="/list-NFT" className="mr-4 p-6">
           List NFT
-        </Link>
-        <Link href="/owned-NFT" className="mr-4 p-6">
-          Owned NFT
-        </Link>
-        <Link href="/created-NFT" className="mr-4 p-6">
-          Created NFT
         </Link>
       </div>
     </nav>

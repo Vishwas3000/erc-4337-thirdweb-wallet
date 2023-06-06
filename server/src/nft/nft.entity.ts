@@ -21,4 +21,7 @@ export class Nft extends BaseEntity{
     @Column()
     nft_smart_contract_address: string;
 
+    @Column({default: 0})
+    is_listed: boolean;
+
 }

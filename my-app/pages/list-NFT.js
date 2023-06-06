@@ -38,11 +38,13 @@ export default function ListNFT() {
         }
       )
       const res = await req.json()
+      console.log("res: ", res)
       const extractedArray = res.map((item) => {
         return {
           id: item.id,
           nftAddress: item.nft_smart_contract_address,
           seller: smartWalletAddress,
+          isListed: item.is_listed,
         }
       })
       console.log("extracted nfts: ", extractedArray)
@@ -68,6 +70,7 @@ export default function ListNFT() {
               seller={nft.seller}
               tokenId={nft.id}
               key={`${nft.nftAddress}${nft.id}`}
+              isListed={nft.isListed}
             />
           ))}
         </div>

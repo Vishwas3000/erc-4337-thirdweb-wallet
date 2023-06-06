@@ -1,9 +1,9 @@
 import { IsNotEmpty } from "class-validator";
 
-export class UpdateNftDto {
+export class UpdateNftListingDto {
     @IsNotEmpty()
     id: number;
 
     @IsNotEmpty()
-    new_owner_smart_wallet_address: string;
+    is_listed: boolean;
 }

@@ -8,4 +8,13 @@ async function GetTokenUriUtil(nftAddress, tokenId, smartWallet) {
   return tokenUri
 }
 
-export { GetTokenUriUtil }
+async function ApproveNftToUtil(nftAddress, toAddress, tokenId, smartWallet) {
+  const sdk = await ThirdwebSDK.fromWallet(smartWallet)
+  const contract = await sdk.getContract(nftAddress)
+
+  const tx = await contract.call("approve", [toAddress, tokenId])
+
+  return tx
+}
+
+export { GetTokenUriUtil, ApproveNftToUtil }

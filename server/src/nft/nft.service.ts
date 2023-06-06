@@ -4,7 +4,8 @@ import { Nft } from './nft.entity';
 import { NftRepository } from './nft.repository';
 import { CreateNftDto } from './dto/create-nft.dto';
 import { SmartWallet } from 'src/smart-wallet/smart-wallet.entity';
-import { UpdateNftDto } from './dto/update-nft.dto';
+import { UpdateNftOwnerDto } from './dto/update-nftOwner.dto';
+import { UpdateNftListingDto } from './dto/update-nftListing.dto';
 
 @Injectable()
 export class NftService {
@@ -23,9 +24,17 @@ export class NftService {
         return newNft;
     }
 
-    async updateNft(nft: UpdateNftDto, smart_wallet: SmartWallet): Promise<Nft>{
+    async updateNftOwner(nft: UpdateNftOwnerDto, smart_wallet: SmartWallet): Promise<Nft>{
         const updateNft = await this.nftRepository.findOne({where:{id:nft.id}, relations:{owner_smart_wallet:true}});
         updateNft.owner_smart_wallet = smart_wallet;
+        await updateNft.save();
+
+        return updateNft;
+    }
+
+    async updateNftListing(nft: UpdateNftListingDto): Promise<Nft>{
+        const updateNft = await this.nftRepository.findOne({where:{id:nft.id}});
+        updateNft.is_listed = nft.is_listed;
         await updateNft.save();
 
         return updateNft;
