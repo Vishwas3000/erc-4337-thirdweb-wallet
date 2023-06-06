@@ -6,4 +6,6 @@ export class UpdateNftListingDto {
 
     @IsNotEmpty()
     is_listed: boolean;
+
+    listing_price: number;
 }

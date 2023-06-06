@@ -34,4 +34,10 @@ export class NftController {
     const nfts = await this.smartWalletService.getAllNftsOwned(owner_smart_wallet_address);
     return nfts;
   }
+
+  @Get('/')
+  async getAllListedNfts(){
+    const nfts = await this.nftService.getAllListedNfts();
+    return nfts;
+  }
 }

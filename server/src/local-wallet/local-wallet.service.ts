@@ -11,14 +11,22 @@ export class LocalWalletService {
     constructor(@InjectRepository(LocalWallet) private readonly localWalletRepository: LocalWalletRepository){}
 
     async createLocalWallet(wallet: CreateLocalWalletDto, user: User): Promise<LocalWallet>{
-        const newLocalWallet = await this.localWalletRepository.save({
-            wallet_address: wallet.wallet_address,
-            wallet_encrypted_data: wallet.wallet_encrypted_data,
-        });
 
-        user.local_wallets = [...user.local_wallets, newLocalWallet];
-        await user.save();
-        return newLocalWallet;
+        try{
+            const newLocalWallet = await this.localWalletRepository.save({
+                wallet_address: wallet.wallet_address,
+                wallet_encrypted_data: wallet.wallet_encrypted_data,
+            });
+    
+            user.local_wallets = [...user.local_wallets, newLocalWallet];
+            await user.save();
+            return newLocalWallet;
+
+        }catch(error){
+            if(error.code === '23505'){
+                return await this.localWalletRepository.findOne({where:{wallet_address:wallet.wallet_address}});
+            }
+        }
     }
 
     getLocalWalletById(id: number):Promise<LocalWallet>{

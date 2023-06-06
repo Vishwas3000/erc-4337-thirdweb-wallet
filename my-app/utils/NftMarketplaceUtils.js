@@ -1,5 +1,6 @@
 const { ThirdwebSDK } = require("@thirdweb-dev/react")
 import { ethers } from "ethers"
+import { Mumbai } from "@thirdweb-dev/chains"
 
 async function ListItemUtil(
   nftMarketplaceAddress,
@@ -57,4 +58,18 @@ async function BuyItemUtil(
   return tx
 }
 
-export { ListItemUtil, UnListItemUtil, UpdateItemPriceUtil, BuyItemUtil }
+async function GetListingUtil(nftMarketplaceAddress, nftAddress, tokenId) {
+  const sdk = new ThirdwebSDK(Mumbai) //readOnly sdk
+  const contract = await sdk.getContract(nftMarketplaceAddress)
+  const listings = await contract.call("getListing", [nftAddress, tokenId])
+
+  return listings
+}
+
+export {
+  ListItemUtil,
+  UnListItemUtil,
+  UpdateItemPriceUtil,
+  BuyItemUtil,
+  GetListingUtil,
+}

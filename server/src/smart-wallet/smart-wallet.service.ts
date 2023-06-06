@@ -11,14 +11,22 @@ export class SmartWalletService {
     constructor(@InjectRepository(SmartWallet) private smartWalletRepository: SmartWalletRepository){}
 
     async createSmartWallet(wallet: CreateSmartWalletDto, local_wallet: LocalWallet): Promise<SmartWallet>{
-        const newSmartWallet = await this.smartWalletRepository.save({
-            wallet_address: wallet.wallet_address,
-        });
-        
-        local_wallet.smart_wallets = [...local_wallet.smart_wallets, newSmartWallet];
 
-        await local_wallet.save();
-        return newSmartWallet;
+        try{
+
+            const newSmartWallet = await this.smartWalletRepository.save({
+                wallet_address: wallet.wallet_address,
+            });
+            
+            local_wallet.smart_wallets = [...local_wallet.smart_wallets, newSmartWallet];
+    
+            await local_wallet.save();
+            return newSmartWallet;
+        }catch(error){
+            if(error.code === '23505'){
+                return await this.smartWalletRepository.findOne({where:{wallet_address:wallet.wallet_address}});
+            }
+        }
     }
 
     async getSmartWalletByAddress(wallet_address: string): Promise<SmartWallet>{

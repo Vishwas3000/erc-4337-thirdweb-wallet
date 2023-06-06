@@ -74,9 +74,6 @@ export default function ListNFT() {
             />
           ))}
         </div>
-        <button className=" flex justify-center rounded-lg bg-blue-500 text-white py-2 w-20 hover:bg-blue-600">
-          List NFT
-        </button>
       </div>
     </div>
   )

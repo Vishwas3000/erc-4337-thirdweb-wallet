@@ -3,30 +3,21 @@ import WalletModal from "./WalletModal"
 import SmartWalletModal from "./SmartWalletModal"
 import LocalWalletModal from "./LocalWalletModal"
 import { UserContext } from "@/pages/_app"
+import WalletDetailModal from "./WalletDetailModal"
+import { truncateAddress } from "@/utils/helpers"
 
 export default function ConnectWallet() {
+  const { EOA, isEOAConnected } = useContext(UserContext)
+
   const [displayWalletModal, setDisplayWalletModal] = useState(false)
   const [displaySmartWalletModal, setDisplaySmartWalletModal] = useState(false)
   const [displayLocalWalletModal, setDisplayLocalWalletModal] = useState(false)
+  const [displayWalletDetailModal, setDisplayWalletDetailModal] =
+    useState(false)
   const [displayAddress, setDisplayAddress] = useState("")
-
-  const [isEOAConnected, setIsEOAConnected] = useState(false)
-  const { EOA } = useContext(UserContext)
-
-  function truncateAddress(address, length = 5) {
-    if (typeof address !== "string") {
-      return ""
-    }
-
-    const truncatedFront = address.substring(0, length)
-    const truncatedBack = address.substring(address.length - length)
-
-    return `${truncatedFront}...${truncatedBack}`
-  }
 
   useEffect(() => {
     if (EOA) {
-      setIsEOAConnected(true)
       handleDisplayDetails()
     }
   }, [EOA])
@@ -59,6 +50,14 @@ export default function ConnectWallet() {
           closePopup={() => setDisplayLocalWalletModal(false)}
         />
       )}
+      {displayWalletDetailModal && (
+        <WalletDetailModal
+          displayAddress={displayAddress}
+          closePopup={() => {
+            setDisplayWalletDetailModal(false)
+          }}
+        />
+      )}
       {!isEOAConnected && (
         <button
           className="rounded-lg bg-blue-500 text-white py-2 px-4 hover:bg-blue-600"
@@ -70,7 +69,12 @@ export default function ConnectWallet() {
         </button>
       )}
       {isEOAConnected && (
-        <button className="rounded-lg bg-blue-500 text-white py-4 px-8 hover:bg-blue-600">
+        <button
+          className="rounded-lg bg-blue-500 text-white py-4 px-8 hover:bg-blue-600"
+          onClick={() => {
+            setDisplayWalletDetailModal(true)
+          }}
+        >
           {displayAddress}
         </button>
       )}

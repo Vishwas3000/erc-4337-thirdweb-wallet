@@ -24,4 +24,7 @@ export class Nft extends BaseEntity{
     @Column({default: 0})
     is_listed: boolean;
 
+    @Column({default: 0})
+    last_listed_price: number;
+
 }

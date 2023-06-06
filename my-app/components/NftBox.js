@@ -3,6 +3,8 @@ import { UserContext } from "@/pages/_app"
 import { GetTokenUriUtil } from "../utils/NftUtils"
 import Image from "next/image"
 import NftModal from "./NftModal"
+import { GetListingUtil } from "@/utils/NftMarketplaceUtils"
+import { ethers } from "ethers"
 
 export default function NftBox({
   nftAddress,
@@ -14,21 +16,24 @@ export default function NftBox({
 }) {
   const { smartWallet } = useContext(UserContext)
 
-  console.log("isListed: ", isListed)
-
   const [imageUrl, setImageUrl] = useState("")
   const [name, setName] = useState("")
   const [description, setDescription] = useState("")
   const [showModal, setShowModal] = useState(false)
   const [displaySeller, setDisplaySeller] = useState("")
   const [isOwnerUser, setIsOwnerUser] = useState(false)
+  const [priceData, setPriceData] = useState()
 
   const hideModal = () => showModal(false)
 
   useEffect(() => {
     updateNftUI()
-    updateDetails()
+    getNftPrice()
   }, [])
+
+  useEffect(() => {
+    if (smartWallet) updateDetails()
+  }, [smartWallet])
 
   const updateDetails = async () => {
     const smartWalletAddress = await smartWallet.getAddress()
@@ -44,6 +49,19 @@ export default function NftBox({
     }
   }
 
+  const getNftPrice = async () => {
+    console.log("nftMarketplaceAddress: ", nftMarketplaceAddress)
+    console.log("nftAddress: ", nftAddress)
+    console.log("tokenId: ", tokenId)
+    const data = await GetListingUtil(
+      nftMarketplaceAddress,
+      nftAddress,
+      tokenId
+    )
+    console.log("price data: ", ethers.utils.formatEther(data.price))
+    setPriceData(ethers.utils.formatEther(data.price))
+  }
+
   function truncateAddress(address, length = 5) {
     if (typeof address !== "string") {
       return ""
@@ -56,7 +74,7 @@ export default function NftBox({
   }
 
   async function updateNftUI() {
-    const tokenUri = await GetTokenUriUtil(nftAddress, tokenId, smartWallet)
+    const tokenUri = await GetTokenUriUtil(nftAddress, tokenId)
     if (tokenUri) {
       const requestURL = tokenUri.replace(
         "ipfs://",
@@ -75,12 +93,8 @@ export default function NftBox({
     }
   }
 
-  async function buyItem() {
-    // Implement buyItem function
-  }
-
   const handelCardClick = async () => {
-    isOwnerUser ? setShowModal(true) : buyItem()
+    setShowModal(true)
   }
 
   return (
@@ -93,6 +107,7 @@ export default function NftBox({
             nftAddress={nftAddress}
             tokenId={tokenId}
             closeModal={() => setShowModal(false)}
+            isUserOwner={isOwnerUser}
           />
         )}
       </div>
@@ -111,9 +126,18 @@ export default function NftBox({
             />
           </div>
           <div className="flex flex-col text-left py-1 text-slate-900 space-y-2">
-            <h3 className="font-bold text-base">Owned by: {displaySeller}</h3>
+            <h3 className="font-bold text-lg">Owned by: {displaySeller}</h3>
             <p className="text-base">{name}</p>
             <p className="text-xs">{description}</p>
+            {isOwnerUser ? (
+              isListed ? (
+                <p className="text-xs italic">{priceData}</p>
+              ) : (
+                <p className="text-xs italic">unlisted</p>
+              )
+            ) : (
+              <p className=" text-sm">Price: {priceData}</p>
+            )}
           </div>
         </button>
       </div>

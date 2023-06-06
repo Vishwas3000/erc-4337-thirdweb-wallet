@@ -3,7 +3,6 @@ import { UserContext } from "@/pages/_app"
 
 export default function SmartWalletModal({ closePopup, localWalletModal }) {
   const { setEOA, setWalletType } = useContext(UserContext)
-  const [password, setPassword] = useState("")
 
   const handleSmartWalletMetamask = () => {
     setWalletType("metamask")
@@ -19,7 +18,7 @@ export default function SmartWalletModal({ closePopup, localWalletModal }) {
     <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 bg-gray-500 backdrop-filter backdrop-blur-sm">
       <div className="w-96 h-60 flex flex-col bg-gradient-to-br from-blue-500 to-blue-700 backdrop-filter backdrop-blur-sm rounded-lg p-6 space-y-10">
         <div className=" flex justify-center font-bold text-2xl">
-          Select Wallet
+          Select EOA Wallet
         </div>
         <div className="flex flex-col space-y-5">
           <button

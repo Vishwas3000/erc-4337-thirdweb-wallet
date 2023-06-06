@@ -7,7 +7,8 @@ import {
 import createSmartWalletUtil from "@/utils/createSmartWalletUtil"
 
 export default function LocalWalletModal({ closePopup }) {
-  const { user, setEOA, setSmartWallet } = useContext(UserContext)
+  const { user, setEOA, setSmartWallet, setIsEOAConnected } =
+    useContext(UserContext)
   const [password, setPassword] = useState("")
   const [personalWallet, setPersonalWallet] = useState()
 
@@ -66,6 +67,8 @@ export default function LocalWalletModal({ closePopup }) {
     console.log(res)
 
     handelGenerateSmartWallet(wallet)
+    sessionStorage.setItem("localWalletPassword", password)
+    setIsEOAConnected(true)
   }
 
   const handelGenerateLocalWallet = async () => {
@@ -98,6 +101,8 @@ export default function LocalWalletModal({ closePopup }) {
 
     if (req.status === 201) {
       handelGenerateSmartWallet(wallet)
+      sessionStorage.setItem("localWalletPassword", password)
+      setIsEOAConnected(true)
     }
   }
 
