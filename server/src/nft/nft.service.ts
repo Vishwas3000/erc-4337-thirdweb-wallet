@@ -27,6 +27,7 @@ export class NftService {
     async updateNftOwner(nft: UpdateNftOwnerDto, smart_wallet: SmartWallet): Promise<Nft>{
         const updateNft = await this.nftRepository.findOne({where:{id:nft.id}, relations:{owner_smart_wallet:true}});
         updateNft.owner_smart_wallet = smart_wallet;
+        updateNft.is_listed = false;
         await updateNft.save();
 
         return updateNft;
