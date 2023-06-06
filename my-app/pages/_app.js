@@ -25,19 +25,6 @@ export default function App({ Component, pageProps }) {
   const [walletType, setWalletType] = useState()
   const [isEOAConnected, setIsEOAConnected] = useState()
 
-  // const changeUser = (newUser) => {
-  //  console.log("newUser: ", newUser)
-  //   setUser(newUser)
-  // }
-
-  // useEffect(() => {
-  //   console.log("smartWallet has been changed: ", smartWallet)
-  // }, [smartWallet])
-
-  // useEffect(() => {
-  //   console.log("EOA has been changed: ", EOA)
-  // }, [EOA])
-
   const [isCredentialPopupOpen, setIsCredentialPopupOpen] = useState(true)
 
   return (
@@ -45,7 +32,7 @@ export default function App({ Component, pageProps }) {
       <UserContext.Provider
         value={{
           user,
-          changeUser,
+          setUser,
           smartWallet,
           setSmartWallet,
           EOA,

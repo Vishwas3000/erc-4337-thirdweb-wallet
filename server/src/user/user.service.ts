@@ -12,11 +12,24 @@ export class UserService {
 
     async createUser(user:CreateUserDto): Promise<User> {
 
-        user.password = await this.hashPassword(user.password);
-        const newUser = await this.userRepository.save(user);
-        delete newUser.password;
+        try{
+            user.password = await this.hashPassword(user.password);
+            const newUser = await this.userRepository.save(user);
+            delete newUser.password;
+    
+            return newUser;
 
-        return newUser;
+        }catch(err){
+            if(err.code === '23505'){
+                const existingUser = await this.getUserByMail(user.email);
+                delete existingUser.password;
+
+                return existingUser;
+            }else{
+                throw err;
+            }
+        }
+
       }
 
     async showById(id: number){
