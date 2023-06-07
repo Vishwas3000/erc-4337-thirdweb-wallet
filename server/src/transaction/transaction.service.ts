@@ -10,6 +10,7 @@ export class TransactionService {
     constructor(@InjectRepository(Transaction) private transactionRepository: TransactionRepository){}
 
     async createTransaction(transaction: CreateTransactionDto, smart_wallet: SmartWallet){
+        console.log(transaction);
         const newTransaction = await this.transactionRepository.save({
             transaction_hash: transaction.transaction_hash,
             function_called: transaction.function_called,

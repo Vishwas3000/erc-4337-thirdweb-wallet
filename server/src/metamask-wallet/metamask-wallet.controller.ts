@@ -10,9 +10,7 @@ export class MetamaskWalletController {
   @Post('/create')
   @UsePipes(ValidationPipe)
   async saveMetamaskWallet(@Body() walletDto:CreateMetamaskWalletDto){
-    console.log(walletDto);
     const user = await this.userService.getUserByMail(walletDto.user_mail_id);
-    console.log(user);
 
     return await this.metamaskWalletService.createMetamaskWallet(walletDto, user);
   }

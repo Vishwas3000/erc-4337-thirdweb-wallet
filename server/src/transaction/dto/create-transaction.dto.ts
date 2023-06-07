@@ -1,4 +1,4 @@
-import { IsNotEmpty } from "class-validator";
+import { IsJSON, IsNotEmpty } from "class-validator";
 
 export class CreateTransactionDto{
     @IsNotEmpty()
@@ -10,5 +10,6 @@ export class CreateTransactionDto{
     @IsNotEmpty()
     smart_wallet_address: string;
 
+    @IsJSON()
     transaction_data: JSON;
 } 

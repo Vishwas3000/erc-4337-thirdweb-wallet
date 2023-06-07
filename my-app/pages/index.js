@@ -42,7 +42,7 @@ export default function Home() {
   return (
     <div>
       <div className=" flex flex-col w-1/5 space-y-4 p-5">
-        <div className="grid grid-cols-3 gap-60">
+        <div className="grid grid-cols-6 gap-60">
           {nfts.map((nft) => (
             <NftBox
               nftAddress={nft.nftAddress}

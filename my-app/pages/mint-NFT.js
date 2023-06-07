@@ -35,26 +35,36 @@ export default function MintNFT() {
 
     const filter = contractInst.filters.NFTMinted()
     provider.on(filter, (data) => {
-      console.log("NFTMinted event emitted: ", data)
-      const transactionHash = data.transactionHash
-      const createdSmartWalletAddress = ethers.utils.getAddress(
-        `0x${data.topics[1].slice(26)}`
-      )
-      const tokenId = parseInt(data.topics[2], 16)
-
-      handleSendTransactionToServer(
-        transactionHash,
-        createdSmartWalletAddress,
-        { tokenId: tokenId, NFTAddress: contractAddress["NFT"] },
-        "mintNFT"
-      )
-
-      handleSendMintNFTToServer(
-        tokenId,
-        createdSmartWalletAddress,
-        contractAddress["NFT"]
-      )
+      handleMintFilter(data)
     })
+  }
+
+  const handleMintFilter = async (data) => {
+    console.log("NFTMinted event emitted: ", data)
+    const transactionHash = data.transactionHash
+    const createdSmartWalletAddress = ethers.utils.getAddress(
+      `0x${data.topics[1].slice(26)}`
+    )
+    const tokenId = parseInt(data.topics[2], 16)
+
+    const transactionData = {
+      tokenId: tokenId,
+      NFTAddress: contractAddress["NFT"],
+    }
+    console.log("transactionData: ", transactionData)
+
+    handleSendTransactionToServer(
+      transactionHash,
+      createdSmartWalletAddress,
+      transactionData,
+      "mintNFT"
+    )
+
+    handleSendMintNFTToServer(
+      tokenId,
+      createdSmartWalletAddress,
+      contractAddress["NFT"]
+    )
   }
 
   const handleSendTransactionToServer = async (

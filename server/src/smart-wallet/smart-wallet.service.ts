@@ -10,17 +10,21 @@ import { Nft } from 'src/nft/nft.entity';
 export class SmartWalletService {
     constructor(@InjectRepository(SmartWallet) private smartWalletRepository: SmartWalletRepository){}
 
-    async createSmartWallet(wallet: CreateSmartWalletDto, local_wallet: LocalWallet): Promise<SmartWallet>{
+    async createSmartWallet(wallet: CreateSmartWalletDto, eoa_wallet): Promise<SmartWallet>{
 
         try{
 
             const newSmartWallet = await this.smartWalletRepository.save({
                 wallet_address: wallet.wallet_address,
             });
+
+            console.log("before: ", eoa_wallet);
+
+            eoa_wallet.smart_wallets = [...eoa_wallet.smart_wallets, newSmartWallet];
+
+            console.log("after: ", eoa_wallet);
             
-            local_wallet.smart_wallets = [...local_wallet.smart_wallets, newSmartWallet];
-    
-            await local_wallet.save();
+            await eoa_wallet.save();
             return newSmartWallet;
         }catch(error){
             if(error.code === '23505'){

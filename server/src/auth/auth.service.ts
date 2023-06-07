@@ -10,7 +10,6 @@ export class AuthService {
     constructor(private usersService:UserService, private jwtService:JwtService){}
 
     async login(authLoginDto: AuthLoginDto) {
-      // console.log("auth: ",authLoginDto)
         const user = await this.validateUser(authLoginDto);
     
         const payload = {

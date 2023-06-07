@@ -28,7 +28,7 @@ async function MetamaskEOAWalletConnect(
       body: JSON.stringify(data),
     })
 
-    console.log("Upload smart account", req)
+    console.log("Upload metamask account", req)
 
     const res = await req.json()
     console.log(res)
@@ -48,8 +48,8 @@ async function MetamaskEOAWalletConnect(
   }
 
   const wallet = await handleDisplayMetamask()
-  await handelGenerateSmartWallet(wallet)
   await handleUploadToServer(wallet)
+  await handelGenerateSmartWallet(wallet)
 }
 
 export default MetamaskEOAWalletConnect

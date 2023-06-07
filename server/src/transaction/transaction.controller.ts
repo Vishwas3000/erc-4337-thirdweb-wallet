@@ -11,7 +11,6 @@ export class TransactionController {
   @Post('/create')
   @UsePipes(ValidationPipe)
   async saveTransaction(@Body() transactionDto:CreateTransactionDto){
-    console.log(transactionDto);
     try{
       const smartWallet = await this.smartWalletService.getSmartWalletByAddress(transactionDto.smart_wallet_address);
     

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import { useState } from "react"
 import { ApproveNftToUtil } from "@/utils/NftUtils"
 import { ethers } from "ethers"
 import {
@@ -6,7 +6,7 @@ import {
   UpdateItemPriceUtil,
   UnListItemUtil,
 } from "@/utils/NftMarketplaceUtils"
-import { contractAddress, nftMarketplaceAbi } from "@/constants"
+import { contractAddress } from "@/constants"
 
 export default function NftModal({
   isListed,
@@ -17,165 +17,6 @@ export default function NftModal({
   isUserOwner,
 }) {
   const [price, setPrice] = useState(0)
-  const isMounted = useRef(false)
-
-  useEffect(() => {
-    if (!isMounted.current) {
-      console.log("isMounted: ", isMounted.current)
-      handleListenEvent()
-    }
-    isMounted.current = true
-  }, [])
-
-  const handleListenEvent = async () => {
-    const provider = new ethers.providers.JsonRpcProvider(
-      process.env.NEXT_PUBLIC_MUMBAI_RPC_URL
-    )
-
-    const contractInst = new ethers.Contract(
-      contractAddress["NFTMarketplace"],
-      nftMarketplaceAbi,
-      provider
-    )
-
-    const itemListedFilter = contractInst.filters.ItemListed()
-    const itemBoughtFilter = contractInst.filters.ItemBought()
-    const itemCancledFilter = contractInst.filters.ItemCancled()
-
-    provider.on(itemListedFilter, (data) => {
-      console.log("ItemUpdated event emitted: ", data)
-      const transactionHash = data.transactionHash
-      const nftSeller = ethers.utils.getAddress(`0x${data.topics[1].slice(26)}`)
-      const nftAddress = ethers.utils.getAddress(
-        `0x${data.topics[2].slice(26)}`
-      )
-      const tokenId = parseInt(data.topics[3], 16)
-
-      const price = parseInt(data.data, 16)
-
-      handleSendTransactionToServer(
-        transactionHash,
-        nftSeller,
-        {
-          tokenId: tokenId,
-          NFTAddress: nftAddress,
-          price: price,
-        },
-        "updateListing"
-      )
-
-      handleUpdateListingNftServer(true, price)
-    })
-
-    provider.on(itemBoughtFilter, (data) => {
-      console.log("ItemBought event emitted: ", data)
-      const transactionHash = data.transactionHash
-      const nftBuyer = ethers.utils.getAddress(`0x${data.topics[1].slice(26)}`)
-      const nftAddress = ethers.utils.getAddress(
-        `0x${data.topics[2].slice(26)}`
-      )
-      const tokenId = parseInt(data.topics[3], 16)
-
-      const price = parseInt(data.data, 16)
-
-      handleSendTransactionToServer(
-        transactionHash,
-        nftBuyer,
-        {
-          tokenId: tokenId,
-          NFTAddress: nftAddress,
-          price: price,
-        },
-        "buyItem"
-      )
-
-      handleUpdateOwnerNftServer(nftBuyer)
-    })
-
-    provider.on(itemCancledFilter, (data) => {
-      console.log("ItemCancled event emitted: ", data)
-      const transactionHash = data.transactionHash
-      const nftSeller = ethers.utils.getAddress(`0x${data.topics[1].slice(26)}`)
-      const nftAddress = ethers.utils.getAddress(
-        `0x${data.topics[2].slice(26)}`
-      )
-      const tokenId = parseInt(data.data, 16)
-
-      handleSendTransactionToServer(
-        transactionHash,
-        nftSeller,
-        {
-          tokenId: tokenId,
-          NFTAddress: nftAddress,
-          isListed: false,
-        },
-        "cancelListing"
-      )
-
-      handleUpdateListingNftServer(false)
-    })
-  }
-
-  const handleSendTransactionToServer = async (
-    transactionHash,
-    smartWalletAddress,
-    transaction_data,
-    functionName
-  ) => {
-    const data = {
-      transaction_hash: transactionHash,
-      smart_wallet_address: smartWalletAddress,
-      function_called: functionName,
-      transaction_data: transaction_data,
-    }
-
-    const req = await fetch("http://localhost:3000/transaction/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-
-    const res = await req.json()
-  }
-
-  const handleUpdateListingNftServer = async (isListed, price = null) => {
-    const data = {
-      id: tokenId,
-      is_listed: isListed,
-      last_listing_price: price,
-    }
-
-    const req = await fetch("http://localhost:3000/nft/update/listing", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-
-    const res = await req.json()
-    console.log("res: ", res)
-  }
-
-  const handleUpdateOwnerNftServer = async (newOwner) => {
-    const data = {
-      id: tokenId,
-      owner: newOwner,
-    }
-
-    const req = await fetch("http://localhost:3000/nft/update/owner", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-
-    const res = await req.json()
-    console.log("res: ", res)
-  }
 
   const handleClickApproveListNft = async () => {
     // Approve marketplace to transfer nft
