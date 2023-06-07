@@ -10,10 +10,10 @@ export class LocalWalletController {
 
   @Post('/create')
   @UsePipes(ValidationPipe)
-  async saveLocalWallet(@Body() wallet:CreateLocalWalletDto){
-    const user = await this.userService.getUserByMail(wallet.user_mail_id);
+  async saveLocalWallet(@Body() walletDto:CreateLocalWalletDto){
+    const user = await this.userService.getUserByMail(walletDto.user_mail_id);
 
-    return await this.localWalletService.createLocalWallet(wallet, user);
+    return await this.localWalletService.createLocalWallet(walletDto, user);
   }
 
   @Get(':address')

@@ -11,13 +11,14 @@ import { LocalWalletModule } from './local-wallet/local-wallet.module';
 import { SmartWalletModule } from './smart-wallet/smart-wallet.module';
 import { TransactionModule } from './transaction/transaction.module';
 import { NftModule } from './nft/nft.module';
+import { MetamaskWalletModule } from './metamask-wallet/metamask-wallet.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRootAsync(typeOrmConfigAsync), 
     ConfigModule.forRoot({isGlobal: true}), 
     UserModule, 
-    AuthModule, LocalWalletModule, SmartWalletModule, TransactionModule, NftModule,
+    AuthModule, LocalWalletModule, SmartWalletModule, TransactionModule, NftModule, MetamaskWalletModule,
   ],
   controllers: [AppController],
   providers: [AppService],

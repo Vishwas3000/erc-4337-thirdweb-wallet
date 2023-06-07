@@ -4,46 +4,19 @@ import {
   LoadLocalWalletUtil,
   GenerateLocalWalletUtil,
 } from "../utils/createLocalWalletUtil"
-import createSmartWalletUtil from "@/utils/createSmartWalletUtil"
+import { createSmartWalletUtil } from "@/utils/createSmartWalletUtil"
 import ClosePopup from "./closePopup"
 import { LocalWallet } from "@thirdweb-dev/wallets"
 
 export default function LocalWalletModal({ closePopup }) {
-  const { user, setEOA, setSmartWallet, setIsEOAConnected, EOA } =
+  const { user, setEOA, setSmartWallet, setIsEOAConnected } =
     useContext(UserContext)
   const [password, setPassword] = useState("")
   const [file, setFile] = useState()
 
-  // useEffect(() => {
-  //   if (EOA) {
-  //     handelGenerateSmartWallet(EOA)
-  //   }
-  // }, [EOA])
-
   const handelGenerateSmartWallet = async (personalWallet) => {
-    console.log("personal wallet: ", personalWallet)
-    const newSmartWallet = await createSmartWalletUtil({
-      presonalWallet: personalWallet,
-    })
-    console.log("new smart wallet: ", newSmartWallet)
+    const newSmartWallet = await createSmartWalletUtil({ personalWallet })
     setSmartWallet(newSmartWallet)
-
-    const data = {
-      wallet_address: await newSmartWallet.getAddress(),
-      local_wallet_address: await personalWallet.getAddress(),
-    }
-
-    const req = await fetch("http://localhost:3000/smart-wallet/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-
-    console.log("Upload smart account", req)
-    const res = await req.json()
-    console.log("result of server: ", res)
   }
 
   const handelLoadLocalWallet = async () => {

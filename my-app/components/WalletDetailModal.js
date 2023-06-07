@@ -5,7 +5,7 @@ import Image from "next/image"
 import ClosePopup from "./closePopup"
 
 export default function WalletDetailModal({ closePopup }) {
-  const { EOA, setEOA, setSmartWallet, setIsEOAConnected, setWalletType } =
+  const { EOA, setEOA, setSmartWallet, setIsEOAConnected, setEOAWalletType } =
     useContext(UserContext)
   const [displayAddress, setDisplayAddress] = useState("")
 
@@ -46,7 +46,7 @@ export default function WalletDetailModal({ closePopup }) {
     setIsEOAConnected(false)
     setEOA(null)
     setSmartWallet(null)
-    setWalletType(null)
+    setEOAWalletType(null)
     sessionStorage.removeItem("localWalletPassword")
     closePopup()
   }

@@ -21,4 +21,8 @@ export class TransactionService {
 
         return newTransaction;
     }
+
+    async getTransactionByHash(transaction_hash: string): Promise<Transaction>{
+        return await this.transactionRepository.findOne({where:{transaction_hash:transaction_hash}});
+    }
 }

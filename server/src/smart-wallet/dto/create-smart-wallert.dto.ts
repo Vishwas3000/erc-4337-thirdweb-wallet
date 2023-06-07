@@ -5,5 +5,8 @@ export class CreateSmartWalletDto {
     wallet_address: string;
 
     @IsNotEmpty()
-    local_wallet_address: string;
+    eoa_wallet_type: string;
+
+    @IsNotEmpty()
+    eoa_wallet_address: string;
 }

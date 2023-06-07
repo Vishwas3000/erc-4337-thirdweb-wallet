@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, BaseEntity, BeforeInsert, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { LocalWallet } from 'src/local-wallet/local-wallet.entity';
+import { MetamaskWallet } from 'src/metamask-wallet/metamask-wallet.entity';
 
 @Entity()
 export class User extends BaseEntity{
@@ -23,6 +24,9 @@ export class User extends BaseEntity{
     
     @OneToMany(()=>LocalWallet, (local_wallet)=>local_wallet.user)
     local_wallets: LocalWallet[];
+
+    @OneToMany(()=>MetamaskWallet, (metamask_wallet)=>metamask_wallet.user)
+    metamask_wallets: MetamaskWallet[];
 
     @BeforeInsert()
     async hashPassword(){

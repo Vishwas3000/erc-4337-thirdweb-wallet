@@ -10,10 +10,19 @@ export class TransactionController {
 
   @Post('/create')
   @UsePipes(ValidationPipe)
-  async saveTransaction(@Body() transaction:CreateTransactionDto){
-    console.log(transaction);
-    const smartWallet = await this.smartWalletService.getSmartWalletByAddress(transaction.smart_wallet_address);
-  
-    return await this.transactionService.createTransaction(transaction, smartWallet);
+  async saveTransaction(@Body() transactionDto:CreateTransactionDto){
+    console.log(transactionDto);
+    try{
+      const smartWallet = await this.smartWalletService.getSmartWalletByAddress(transactionDto.smart_wallet_address);
+    
+      return await this.transactionService.createTransaction(transactionDto, smartWallet);
+
+    }catch(err){
+      if(err.code === '23505'){
+        const transaction = await this.transactionService.getTransactionByHash(transactionDto.transaction_hash);
+        throw new Error('Transaction already exists');
+        return  transaction;
+      }
+    }
   }
 }

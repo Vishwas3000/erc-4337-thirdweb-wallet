@@ -69,6 +69,7 @@ export default function MintNFT() {
       function_called: functionName,
       transaction_data: transaction_data,
     }
+    console.log("data: ", data)
 
     const req = await fetch("http://localhost:3000/transaction/create", {
       method: "POST",
@@ -106,6 +107,7 @@ export default function MintNFT() {
 
   useEffect(() => {
     if (!isMounted.current) {
+      console.log("mounted")
       handleListenEvent()
     }
     isMounted.current = true

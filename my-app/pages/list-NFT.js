@@ -9,7 +9,7 @@ export default function ListNFT() {
 
   const handleGetNftOwnedByUser = async () => {
     console.log("smartWallet: ", smartWallet)
-    if (!smartWallet) {
+    if (smartWallet === undefined) {
       const address = await smartWallet.getAddress()
       const req = await fetch(
         `http://localhost:3000/smart-wallet/nfts/${address}`,

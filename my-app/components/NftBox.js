@@ -33,6 +33,7 @@ export default function NftBox({
 
   useEffect(() => {
     if (smartWallet) updateDetails()
+    console.log("smartWallet: ", smartWallet)
   }, [smartWallet])
 
   const updateDetails = async () => {

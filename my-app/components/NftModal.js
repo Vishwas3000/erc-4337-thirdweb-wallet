@@ -21,6 +21,7 @@ export default function NftModal({
 
   useEffect(() => {
     if (!isMounted.current) {
+      console.log("isMounted: ", isMounted.current)
       handleListenEvent()
     }
     isMounted.current = true
@@ -232,7 +233,7 @@ export default function NftModal({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 bg-gray-500 backdrop-filter backdrop-blur-sm">
-      <div className="w-96 h-60 flex flex-col bg-gradient-to-br from-blue-500 to-blue-700 backdrop-filter backdrop-blur-sm rounded-lg p-6 space-y-10">
+      <div className="w-96 h-auto flex flex-col bg-gradient-to-br from-blue-500 to-blue-700 backdrop-filter backdrop-blur-sm rounded-lg p-6 space-y-10">
         <div>
           {isUserOwner ? (
             isListed ? (
@@ -334,7 +335,7 @@ export default function NftModal({
                     className="bg-white text-blue-500 py-1 px-4 rounded-lg"
                     onClick={handleClickApproveListNft}
                   >
-                    ListNFT
+                    List NFT
                   </button>
                 </div>
               </div>

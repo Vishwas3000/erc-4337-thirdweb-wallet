@@ -2,15 +2,20 @@ import { useState, useContext } from "react"
 import { UserContext } from "@/pages/_app"
 import ClosePopup from "./closePopup"
 
-export default function SmartWalletModal({ closePopup, localWalletModal }) {
-  const { setEOA, setWalletType } = useContext(UserContext)
+export default function SmartWalletModal({
+  closePopup,
+  localWalletModal,
+  smartWalletModal,
+}) {
+  const { setEOA, setEOAWalletType } = useContext(UserContext)
 
-  const handleSmartWalletMetamask = () => {
-    setWalletType("metamask")
+  const handleSmartWalletMetamask = async () => {
+    setEOAWalletType("metamask")
+    smartWalletModal()
     closePopup()
   }
   const handleSmartWalletLocalWallet = () => {
-    setWalletType("localWallet")
+    setEOAWalletType("localWallet")
     localWalletModal()
     closePopup()
   }

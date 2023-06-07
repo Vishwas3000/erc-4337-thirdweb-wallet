@@ -2,7 +2,7 @@ import { useState, useContext } from "react"
 import { UserContext } from "@/pages/_app"
 
 const SignInPopup = ({ closePopup }) => {
-  const { user, changeUser } = useContext(UserContext)
+  const { user, setUser } = useContext(UserContext)
 
   const [emailId, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -12,7 +12,7 @@ const SignInPopup = ({ closePopup }) => {
       email: emailId,
       password: password,
     }
-    changeUser(emailId)
+    setUser(emailId)
     console.log(data)
     const req = await fetch("http://localhost:3000/user/create", {
       method: "POST",

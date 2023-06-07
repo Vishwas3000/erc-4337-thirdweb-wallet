@@ -2,13 +2,13 @@ import { useState, useContext } from "react"
 import { UserContext } from "@/pages/_app"
 
 export default function LoginPopup({ closePopup }) {
-  const { user, changeUser } = useContext(UserContext)
+  const { user, setUser } = useContext(UserContext)
   const [emailId, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
   const handleLogin = async () => {
     console.log("handleLogin: ", emailId)
-    changeUser(emailId)
+    setUser(emailId)
     const data = {
       email: emailId,
       password: password,
@@ -23,9 +23,9 @@ export default function LoginPopup({ closePopup }) {
       },
     })
 
-    // console.log(req)
+    console.log(req)
     const res = await req.json()
-    // console.log(res)
+    console.log(res)
     if (res.status == 201) {
       return { respond: req.status, message: "success" }
     } else {

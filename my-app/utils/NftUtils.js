@@ -10,6 +10,8 @@ async function GetTokenUriUtil(nftAddress, tokenId) {
 }
 
 async function ApproveNftToUtil(nftAddress, toAddress, tokenId, smartWallet) {
+  console.log("nftAddress: ", nftAddress)
+  console.log("toAddress: ", toAddress)
   const sdk = await ThirdwebSDK.fromWallet(smartWallet)
   const contract = await sdk.getContract(nftAddress)
 
