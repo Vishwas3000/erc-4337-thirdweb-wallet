@@ -1,5 +1,6 @@
 import { LocalWallet, SmartWallet } from "@thirdweb-dev/wallets"
 import { Mumbai } from "@thirdweb-dev/chains"
+import { contractAddress } from "@/constants"
 
 async function SmartWalletConnect() {
   // First, connect the personal wallet, which can be any wallet (metamask, walletconnect, etc.)
@@ -12,7 +13,7 @@ async function SmartWalletConnect() {
   // Setup the Smart Wallet configuration
   const SmartWalletConfig = {
     chain: Mumbai, // the chain where your smart wallet will be or is deployed
-    factoryAddress: process.env.FactoryAddress, // your own deployed account factory address
+    factoryAddress: contractAddress["FactoryAddress"], // your own deployed account factory address
     thirdwebApiKey: process.env.thirdwebApiKey, // obtained from the thirdweb dashboard
     gasless: true, // enable or disable gasless transactions
   }
