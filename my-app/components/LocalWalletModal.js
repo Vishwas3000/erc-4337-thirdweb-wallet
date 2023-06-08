@@ -1,5 +1,5 @@
 import { UserContext } from "@/pages/_app"
-import { useContext, useState, useEffect } from "react"
+import { useContext, useState } from "react"
 import {
   LoadLocalWalletUtil,
   GenerateLocalWalletUtil,
@@ -13,6 +13,7 @@ export default function LocalWalletModal({ closePopup }) {
     useContext(UserContext)
   const [password, setPassword] = useState("")
   const [file, setFile] = useState()
+  const [localWalletAddType, setLocalWalletAddType] = useState("Load")
 
   const handelGenerateSmartWallet = async (personalWallet) => {
     const newSmartWallet = await createSmartWalletUtil({ personalWallet })
@@ -121,6 +122,41 @@ export default function LocalWalletModal({ closePopup }) {
           </div>
           <ClosePopup closePopup={closePopup} />
         </div>
+        <div className=" flex flex-row justify-evenly">
+          <button onClick={() => setLocalWalletAddType("Load")}>
+            <span
+              className={` ${
+                localWalletAddType === "Load"
+                  ? " border-b-4 border-blue-800"
+                  : " "
+              }`}
+            >
+              Load
+            </span>
+          </button>
+          <button onClick={() => setLocalWalletAddType("Generate")}>
+            <span
+              className={` ${
+                localWalletAddType === "Generate"
+                  ? " border-b-4 border-blue-800"
+                  : " "
+              }`}
+            >
+              Generate
+            </span>
+          </button>
+          <button onClick={() => setLocalWalletAddType("Import")}>
+            <span
+              className={` ${
+                localWalletAddType === "Import"
+                  ? " border-b-4 border-blue-800"
+                  : " "
+              }`}
+            >
+              Import
+            </span>
+          </button>
+        </div>
         <div className=" flex flex-col space-y-2">
           <label className="">Password</label>
           <input
@@ -129,41 +165,49 @@ export default function LocalWalletModal({ closePopup }) {
             className="rounded-lg px-4 py-2 border border-gray-300 focus:outline-none focus:border-blue-500 text-black"
           />
         </div>
-        <div className=" flex flex-col space-y-2">
-          <label className="">Import EncryptWallet</label>
-          <input
-            type="file"
-            onChange={(e) => setFile(e.target.files[0])}
-          ></input>
-        </div>
-        <div className=" grid grid-cols-2 gap-4">
-          <button
-            className="bg-white text-blue-500 py-2 px-4 rounded-lg"
-            onClick={() => {
-              closePopup()
-              handelLoadLocalWallet()
-            }}
-          >
-            Load Wallet
-          </button>
-          <button
-            className="bg-white text-blue-500 py-2 px-4 rounded-lg"
-            onClick={() => {
-              closePopup()
-              handelGenerateLocalWallet()
-            }}
-          >
-            General Wallet
-          </button>
-          <button
-            className=" text-white bg-green-600 py-2 px-4 rounded-lg"
-            onClick={() => {
-              handleImportWallet()
-              closePopup()
-            }}
-          >
-            Import wallet
-          </button>
+        {localWalletAddType === "Import" && (
+          <div className=" flex flex-col space-y-2">
+            <label className="">Import EncryptWallet</label>
+            <input
+              type="file"
+              onChange={(e) => setFile(e.target.files[0])}
+            ></input>
+          </div>
+        )}
+        <div className=" flex justify-center">
+          {localWalletAddType === "Load" && (
+            <button
+              className="bg-white text-blue-500 py-2 px-4 rounded-lg"
+              onClick={() => {
+                closePopup()
+                handelLoadLocalWallet()
+              }}
+            >
+              Load Wallet
+            </button>
+          )}
+          {localWalletAddType === "Generate" && (
+            <button
+              className="bg-white text-blue-500 py-2 px-4 rounded-lg"
+              onClick={() => {
+                closePopup()
+                handelGenerateLocalWallet()
+              }}
+            >
+              General Wallet
+            </button>
+          )}
+          {localWalletAddType === "Import" && (
+            <button
+              className="bg-white text-blue-500 py-2 px-4 rounded-lg"
+              onClick={() => {
+                handleImportWallet()
+                closePopup()
+              }}
+            >
+              Import wallet
+            </button>
+          )}
         </div>
       </div>
     </div>

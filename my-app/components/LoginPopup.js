@@ -13,7 +13,6 @@ export default function LoginPopup({ closePopup }) {
       email: emailId,
       password: password,
     }
-    // console.log(data)
 
     const req = await fetch("http://localhost:3000/auth", {
       method: "POST",
@@ -26,7 +25,7 @@ export default function LoginPopup({ closePopup }) {
     console.log(req)
     const res = await req.json()
     console.log(res)
-    if (res.status == 201) {
+    if (req.status == 201) {
       return { respond: req.status, message: "success" }
     } else {
       return { respond: req.status, message: res.message }

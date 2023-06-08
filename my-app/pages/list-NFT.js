@@ -56,13 +56,17 @@ export default function ListNFT() {
   }
 
   useEffect(() => {
-    handleGetNftOwnedByUser()
-    if (!isMounted.current) {
-      console.log("isMounted: ", isMounted.current)
-      console.log("listning to events")
-      handleListenEvent()
+    if (EOA == undefined) {
+      alert("Please connect your wallet")
+    } else {
+      handleGetNftOwnedByUser()
+      if (!isMounted.current) {
+        console.log("isMounted: ", isMounted.current)
+        console.log("listning to events")
+        handleListenEvent()
 
-      isMounted.current = true
+        isMounted.current = true
+      }
     }
   }, [])
 

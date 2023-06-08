@@ -24,7 +24,9 @@ const SignInPopup = ({ closePopup }) => {
     console.log(req)
     const res = await req.json()
     console.log(res)
-    if (res.status == 201) {
+    if (req.status == 201) {
+      if (res.msg == "User already exists")
+        alert("User already exists, loging in...")
       return { respond: req.status, message: "success" }
     } else {
       return { respond: req.status, message: res.message }

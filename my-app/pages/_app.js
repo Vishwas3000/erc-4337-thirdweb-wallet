@@ -1,5 +1,4 @@
 import "@/styles/globals.css"
-import { ThirdwebProvider } from "@thirdweb-dev/react"
 import Header from "../components/Header"
 import CredentialPopup from "@/components/credentialPopup"
 import { useState, createContext, useEffect } from "react"

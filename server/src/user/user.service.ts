@@ -10,7 +10,7 @@ export class UserService {
 
     constructor(@InjectRepository(User) private userRepository: UserRepository){}
 
-    async createUser(user:CreateUserDto): Promise<User> {
+    async createUser(user:CreateUserDto){
 
         try{
             user.password = await this.hashPassword(user.password);
@@ -24,7 +24,7 @@ export class UserService {
                 const existingUser = await this.getUserByMail(user.email);
                 delete existingUser.password;
 
-                return existingUser;
+                return {msg: 'User already exists', user: existingUser}
             }else{
                 throw err;
             }

@@ -5,8 +5,14 @@ import Image from "next/image"
 import ClosePopup from "./closePopup"
 
 export default function WalletDetailModal({ closePopup }) {
-  const { EOA, setEOA, setSmartWallet, setIsEOAConnected, setEOAWalletType } =
-    useContext(UserContext)
+  const {
+    EOA,
+    setEOA,
+    setSmartWallet,
+    setIsEOAConnected,
+    setEOAWalletType,
+    EOAwalletType,
+  } = useContext(UserContext)
   const [displayAddress, setDisplayAddress] = useState("")
 
   useEffect(() => {
@@ -75,14 +81,16 @@ export default function WalletDetailModal({ closePopup }) {
           >
             {displayAddress}
           </button>
-          <button onClick={handelExportWalletEncrypt}>
-            <Image
-              src="/images/export.png"
-              alt="Export Image"
-              width={20}
-              height={20}
-            />
-          </button>
+          {EOAwalletType == "localWallet" && (
+            <button onClick={handelExportWalletEncrypt}>
+              <Image
+                src="/images/export.png"
+                alt="Export Image"
+                width={20}
+                height={20}
+              />
+            </button>
+          )}
         </div>
       </div>
     </div>
