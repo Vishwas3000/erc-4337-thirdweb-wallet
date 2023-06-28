@@ -20,13 +20,16 @@ async function MetamaskEOAWalletConnect(
       user_mail_id: user,
     }
 
-    const req = await fetch("http://localhost:3000/metamask-wallet/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
+    const req = await fetch(
+      "http://13.234.122.138:3000/metamask-wallet/create",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    )
 
     console.log("Upload metamask account", req)
 

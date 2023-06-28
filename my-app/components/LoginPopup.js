@@ -14,7 +14,7 @@ export default function LoginPopup({ closePopup }) {
       password: password,
     }
 
-    const req = await fetch("http://localhost:3000/auth", {
+    const req = await fetch("http://13.234.122.138:3000/auth", {
       method: "POST",
       body: JSON.stringify(data),
       headers: {

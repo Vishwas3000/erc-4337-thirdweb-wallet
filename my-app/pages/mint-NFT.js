@@ -81,7 +81,7 @@ export default function MintNFT() {
     }
     console.log("data: ", data)
 
-    const req = await fetch("http://localhost:3000/transaction/create", {
+    const req = await fetch("http://13.234.122.138:3000/transaction/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -103,7 +103,7 @@ export default function MintNFT() {
       nft_smart_contract_address: nftAddress,
     }
 
-    const req = await fetch("http://localhost:3000/nft/create", {
+    const req = await fetch("http://13.234.122.138:3000/nft/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -37,7 +37,7 @@ export default function LocalWalletModal({ closePopup }) {
       wallet_encrypted_data: jsonDataEncoded,
     }
     console.log("data: ", data)
-    const req = await fetch("http://localhost:3000/local-wallet/create", {
+    const req = await fetch("http://13.234.122.138:3000/local-wallet/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -69,7 +69,7 @@ export default function LocalWalletModal({ closePopup }) {
       wallet_encrypted_data: jsonDataEncoded,
     }
     console.log("data: ", data)
-    const req = await fetch("http://localhost:3000/local-wallet/create", {
+    const req = await fetch("13.234.122.138/local-wallet/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

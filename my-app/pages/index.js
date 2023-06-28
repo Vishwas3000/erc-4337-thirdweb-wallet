@@ -12,7 +12,7 @@ export default function Home() {
   const NFTMarketplaceAddress = contractAddress["NFTMarketplace"]
 
   const handleDisplayNfts = async () => {
-    const req = await fetch(`http://localhost:3000/nft`, {
+    const req = await fetch(`http://13.234.122.138:3000/nft`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

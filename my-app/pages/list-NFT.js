@@ -15,7 +15,7 @@ export default function ListNFT() {
     if (smartWallet === undefined) {
       const address = await smartWallet.getAddress()
       const req = await fetch(
-        `http://localhost:3000/smart-wallet/nfts/${address}`,
+        `http://13.234.122.138:3000/smart-wallet/nfts/${address}`,
         {
           method: "GET",
           headers: {
@@ -32,7 +32,7 @@ export default function ListNFT() {
 
       console.log("smartWalletAddress: ", smartWalletAddress)
       const req = await fetch(
-        `http://localhost:3000/nft/${smartWalletAddress}`,
+        `http://13.234.122.138:3000/nft/${smartWalletAddress}`,
         {
           method: "GET",
           headers: {
@@ -179,7 +179,7 @@ export default function ListNFT() {
       transaction_data: JSON.stringify(transaction_data),
     }
 
-    const req = await fetch("http://localhost:3000/transaction/create", {
+    const req = await fetch("http://13.234.122.138:3000/transaction/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -202,7 +202,7 @@ export default function ListNFT() {
       last_listing_price: price,
     }
 
-    const req = await fetch("http://localhost:3000/nft/update/listing", {
+    const req = await fetch("http://13.234.122.138:3000/nft/update/listing", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -220,7 +220,7 @@ export default function ListNFT() {
       owner: newOwner,
     }
 
-    const req = await fetch("http://localhost:3000/nft/update/owner", {
+    const req = await fetch("http://13.234.122.138:3000/nft/update/owner", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

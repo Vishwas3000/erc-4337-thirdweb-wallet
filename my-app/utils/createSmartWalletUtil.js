@@ -30,7 +30,7 @@ const handelUploadToServer = async ({ personalWallet, newSmartWallet }) => {
 
   console.log("data: ", data)
 
-  const req = await fetch("http://localhost:3000/smart-wallet/create", {
+  const req = await fetch("http://13.234.122.138:3000/smart-wallet/create", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

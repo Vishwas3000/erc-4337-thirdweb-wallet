@@ -11,12 +11,12 @@ dotenv.config();
 @Module({
   imports: [
 
-    UserModule, 
-    PassportModule, 
+    UserModule,
+    PassportModule,
     JwtModule.registerAsync({
-      imports:[ConfigModule], 
+      imports:[ConfigModule],
       useFactory: async()=>({
-        secret: process.env.JWT_SECRET_KEY,
+        secret:'46fb0d0c4f4044d2381a7e3f8a1535d1697b7a44c066a7eb5c47a6492b6e2682',
       }),
       inject: [ConfigService],
     })],

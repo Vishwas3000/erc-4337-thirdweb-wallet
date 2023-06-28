@@ -14,8 +14,8 @@ export class UserService {
 
         try{
             userDto.password = await this.hashPassword(userDto.password);
-
-            const newUser = new this.userModel(userDto)
+            
+            const newUser = new this.userModel({email: userDto.email, password: userDto.password})
             await newUser.save();
             
             delete newUser.password;

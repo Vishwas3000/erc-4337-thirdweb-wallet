@@ -2,8 +2,9 @@ version: '3'
 
 services:
   backend:
-    build: ./
-    container_name: nestjs_api
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
       - PORT=3000
       - MONGO_URI=mongodb+srv://ec2-user:password_mongodb@aws-mongodb-cluster.sbcegsr.mongodb.net/
@@ -12,9 +13,9 @@ services:
       - '3000:3000'
     depends_on:
       - database
-    networks: 
+    networks:
       - nestjs_network
-  
+
   database:
     image: mongo
     container_name: mongodb
@@ -26,3 +27,4 @@ services:
 networks:
   nestjs_network:
     driver: bridge
+
