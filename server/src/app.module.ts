@@ -10,10 +10,21 @@ import { TransactionModule } from './transaction/transaction.module';
 import { NftModule } from './nft/nft.module';
 import { MetamaskWalletModule } from './metamask-wallet/metamask-wallet.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { config } from 'dotenv';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb+srv://ec2-user:password_mongodb@aws-mongodb-cluster.sbcegsr.mongodb.net/'),
+    ConfigModule.forRoot({
+      load:[config],
+      isGlobal: true,
+    }),
+    MongooseModule.forRootAsync({
+      inject:[ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        uri: configService.get<string>('MONGODB_URI'),
+      }),
+    }),
     UserModule, 
     AuthModule, LocalWalletModule, SmartWalletModule, TransactionModule, NftModule, MetamaskWalletModule,
   ],
