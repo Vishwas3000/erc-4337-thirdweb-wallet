@@ -19,6 +19,8 @@ services:
     image: mongo
     ports:
       -'27017:27017'
+    networks:
+      - nestjs_network
 networks:
   nestjs_network:
     driver: bridge
