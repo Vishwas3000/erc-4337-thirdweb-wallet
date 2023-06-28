@@ -1,27 +1,30 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './user.entity';
-import { UserRepository } from './user.repository';
+import { InjectModel } from '@nestjs/mongoose';
+import { User, UserDocument } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcryptjs';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class UserService {
 
-    constructor(@InjectRepository(User) private userRepository: UserRepository){}
+    constructor(@InjectModel(User.name) private readonly userModel: Model<UserDocument>){}
 
-    async createUser(user:CreateUserDto){
+    async createUser(userDto:CreateUserDto){
 
         try{
-            user.password = await this.hashPassword(user.password);
-            const newUser = await this.userRepository.save(user);
+            userDto.password = await this.hashPassword(userDto.password);
+
+            const newUser = new this.userModel(userDto)
+            await newUser.save();
+            
             delete newUser.password;
     
             return newUser;
 
         }catch(err){
             if(err.code === '23505'){
-                const existingUser = await this.getUserByMail(user.email);
+                const existingUser = await this.getUserByMail(userDto.email);
                 delete existingUser.password;
 
                 return {msg: 'User already exists', user: existingUser}
@@ -39,22 +42,22 @@ export class UserService {
         return user;
     }
 
-    async getUserByMail(email: string): Promise<User>{
-        const user = await this.userRepository.findOne({where:{email:email}, relations:{ local_wallets:true, metamask_wallets:true}});
+    async getUserByMail(email: string): Promise<UserDocument>{
+        const user = await this.userModel.findOne({email:email}).exec();
         return user;
     }
 
-    async getUserById(id: number): Promise<User>{
-        const user = await this.userRepository.findOne({where:{id:id}, relations:{local_wallets:true, metamask_wallets:true}});
+    async getUserById(id: number):Promise<UserDocument>{
+        const user = await this.userModel.findById(id).exec();
         return user;
     }
 
-    async findById(id: number): Promise<User>{
-        return await this.userRepository.findOneBy({id:id});
+    async findById(id: number): Promise<UserDocument>{
+        return await this.userModel.findOne ({id:id});
     }
 
-    async findByEmail(email: string): Promise<User>{
-        return await this.userRepository.findOneBy({email:email});
+    async findByEmail(email: string): Promise<UserDocument>{
+        return await this.userModel.findOne({email:email});
     }
 
     async hashPassword(password: string): Promise<string>{

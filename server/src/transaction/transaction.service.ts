@@ -1,29 +1,31 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Transaction } from './transaction.entity';
-import { TransactionRepository } from './transaction.repository';
+import { Transaction, TransactionDocument } from './transaction.entity';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
-import { SmartWallet } from 'src/smart-wallet/smart-wallet.entity';
+import { SmartWallet, SmartWalletDocument } from 'src/smart-wallet/smart-wallet.entity';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class TransactionService {
-    constructor(@InjectRepository(Transaction) private transactionRepository: TransactionRepository){}
+    constructor(@InjectModel(Transaction.name) private transactionModule: Model<TransactionDocument>){}
 
-    async createTransaction(transaction: CreateTransactionDto, smart_wallet: SmartWallet){
-        console.log(transaction);
-        const newTransaction = await this.transactionRepository.save({
+    async createTransaction(transaction: CreateTransactionDto, smart_wallet: SmartWalletDocument){
+        // console.log(transaction);
+        const newTransaction = new this.transactionModule({
             transaction_hash: transaction.transaction_hash,
             function_called: transaction.function_called,
             transaction_data: transaction.transaction_data,
         })
+        newTransaction.smart_wallet = smart_wallet;
+        newTransaction.save();
 
-        smart_wallet.transactions = [...smart_wallet.transactions, newTransaction];
+        smart_wallet.transactions.push(newTransaction);
         await smart_wallet.save();
 
-        return newTransaction;
+        return newTransaction.toObject();
     }
 
     async getTransactionByHash(transaction_hash: string): Promise<Transaction>{
-        return await this.transactionRepository.findOne({where:{transaction_hash:transaction_hash}});
+        return await this.transactionModule.findOne({where:{transaction_hash:transaction_hash}});
     }
 }

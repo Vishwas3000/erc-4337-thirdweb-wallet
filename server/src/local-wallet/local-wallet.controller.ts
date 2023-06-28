@@ -22,9 +22,9 @@ export class LocalWalletController {
     return localWallet;
   }
 
-  @Get('/smart-wallets/:address')
-  async getSmartWallets(@Param('address') localWalletAddress: string):Promise<SmartWallet[]>{
-    const smartWallets = await this.localWalletService.getSmartWalletsByLocalWalletAddress(localWalletAddress);
-    return smartWallets;
-  }
+  // @Get('/smart-wallets/:address')
+  // async getSmartWallets(@Param('address') localWalletAddress: string):Promise<SmartWallet[]>{
+  //   const smartWallets = await this.localWalletService.getSmartWalletsByLocalWalletAddress(localWalletAddress);
+  //   return smartWallets;
+  // }
 }

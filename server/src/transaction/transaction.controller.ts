@@ -12,7 +12,7 @@ export class TransactionController {
   @UsePipes(ValidationPipe)
   async saveTransaction(@Body() transactionDto:CreateTransactionDto){
     try{
-      const smartWallet = await this.smartWalletService.getSmartWalletByAddress(transactionDto.smart_wallet_address);
+      const smartWallet = (await this.smartWalletService.getSmartWalletByAddress(transactionDto.smart_wallet_address)).toObject();
     
       return await this.transactionService.createTransaction(transactionDto, smartWallet);
 

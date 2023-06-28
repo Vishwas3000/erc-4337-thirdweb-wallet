@@ -39,8 +39,8 @@ const handelUploadToServer = async ({ personalWallet, newSmartWallet }) => {
   })
 
   console.log("Upload smart account", req)
-  const res = await req.json()
-  console.log("result of server: ", res)
+  // const res = await req.json()
+  // console.log("result of server: ", res)
 }
 
 const createSmartWalletUtil = async ({ personalWallet }) => {

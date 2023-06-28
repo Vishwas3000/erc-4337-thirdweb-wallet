@@ -1,45 +1,49 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { LocalWallet } from './local-wallet.entity';
-import { LocalWalletRepository } from './local-wallet.repository';
-import { User } from 'src/user/user.entity';
+import { LocalWallet, LocalWalletDocument } from './local-wallet.entity';
+import { User, UserDocument } from 'src/user/user.entity';
 import { CreateLocalWalletDto } from './dto/create-local-wallet.dto';
 import { SmartWallet } from 'src/smart-wallet/smart-wallet.entity';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class LocalWalletService {
-    constructor(@InjectRepository(LocalWallet) private readonly localWalletRepository: LocalWalletRepository){}
+    constructor(@InjectModel(LocalWallet.name) private readonly localWalletModel: Model<LocalWalletDocument>){}
 
-    async createLocalWallet(wallet: CreateLocalWalletDto, user: User): Promise<LocalWallet>{
+    async createLocalWallet(walletDto: CreateLocalWalletDto, user: UserDocument): Promise<LocalWallet>{
 
         try{
-            const newLocalWallet = await this.localWalletRepository.save({
-                wallet_address: wallet.wallet_address,
-                wallet_encrypted_data: wallet.wallet_encrypted_data,
-            });
-    
-            user.local_wallets = [...user.local_wallets, newLocalWallet];
+            const {wallet_address, wallet_encrypted_data} = walletDto;
+            const newLocalWallet = new this.localWalletModel({wallet_address: wallet_address, wallet_encrypted_data: wallet_encrypted_data
+
+            })
+            await newLocalWallet.save();
+            console.log('newLocalWallet: ', newLocalWallet);
+
+            user.local_wallets.push(newLocalWallet);
             await user.save();
-            return newLocalWallet;
+
+            return newLocalWallet.toObject();
 
         }catch(error){
+            console.log('error: ', error);
             if(error.code === '23505'){
-                return await this.localWalletRepository.findOne({where:{wallet_address:wallet.wallet_address}});
+                return await this.localWalletModel.findOne({where:{wallet_address:walletDto.wallet_address}});
             }
         }
     }
 
-    getLocalWalletById(id: number):Promise<LocalWallet>{
-        return this.localWalletRepository.findOne({where:{id:id}, relations:{smart_wallets:true}});
+    getLocalWalletById(id: number):Promise<LocalWalletDocument>{
+        return this.localWalletModel.findById(id).exec();
     }
 
-    getLocalWalletByAddress(wallet_address: string):Promise<LocalWallet>{
-        return this.localWalletRepository.findOne({where:{wallet_address:wallet_address}, relations:{smart_wallets:true}})
+    getLocalWalletByAddress(wallet_address: string){
+        return this.localWalletModel.findOne({wallet_address:wallet_address}).exec()
     }
 
-    getSmartWalletsByLocalWalletAddress(wallet_address: string):Promise<SmartWallet[]>{
-        return this.localWalletRepository.findOne({where:{wallet_address:wallet_address}, relations:{smart_wallets:true}}).then((localWallet)=>{
-            return localWallet.smart_wallets;
-        })
-    }
+    // getSmartWalletsByLocalWalletAddress(wallet_address: string):Promise<SmartWallet[]>{
+    //     return this.localWalletModel.findOne({where:{wallet_address:wallet_address}, relations:{smart_wallets:true}}).then((localWallet)=>{
+    //         return localWallet.smart_wallets;
+    //     })
+    // }
 }

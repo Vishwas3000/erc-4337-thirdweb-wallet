@@ -77,8 +77,8 @@ export default function LocalWalletModal({ closePopup }) {
       body: JSON.stringify(data),
     })
     console.log(req)
-    const res = await req.json()
-    console.log(res)
+    // const res = await req.json()
+    // console.log(res)
 
     if (req.status === 201) {
       sessionStorage.setItem("localWalletPassword", password)

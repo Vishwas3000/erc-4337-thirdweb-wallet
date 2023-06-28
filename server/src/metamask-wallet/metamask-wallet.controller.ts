@@ -11,7 +11,7 @@ export class MetamaskWalletController {
   @UsePipes(ValidationPipe)
   async saveMetamaskWallet(@Body() walletDto:CreateMetamaskWalletDto){
     const user = await this.userService.getUserByMail(walletDto.user_mail_id);
-
+    // console.log('user: ', user);
     return await this.metamaskWalletService.createMetamaskWallet(walletDto, user);
   }
 
@@ -21,11 +21,11 @@ export class MetamaskWalletController {
   return metamaskWallet;
   }
 
-  @Get('/smart-wallets/:address')
-  async getSmartWallets(@Param('address') metamaskWalletAddress: string){
-    const smartWallets = await this.metamaskWalletService.getSmartWalletsByMetamaskWalletAddress(metamaskWalletAddress);
-    return smartWallets;
-  }
+  // @Get('/smart-wallets/:address')
+  // async getSmartWallets(@Param('address') metamaskWalletAddress: string){
+  //   const smartWallets = await this.metamaskWalletService.getSmartWalletsByMetamaskWalletAddress(metamaskWalletAddress);
+  //   return smartWallets;
+  // }
 
 
 }

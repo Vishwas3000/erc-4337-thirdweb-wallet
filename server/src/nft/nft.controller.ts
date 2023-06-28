@@ -12,14 +12,14 @@ export class NftController {
   @Post('/create')
   @UsePipes(ValidationPipe)
   async createNft(@Body() nft:CreateNftDto){
-    const creatorSmartWallet = await this.smartWalletService.getSmartWalletByAddress(nft.creator_address);
+    const creatorSmartWallet = (await this.smartWalletService.getSmartWalletByAddress(nft.creator_address)).toObject();
     return await this.nftService.createNft(nft, creatorSmartWallet);
   }
 
   @Post('/update/owner')
   @UsePipes(ValidationPipe)
   async updateNft(@Body() nft:UpdateNftOwnerDto){
-    const ownerSmartWallet = await this.smartWalletService.getSmartWalletByAddress(nft.new_owner_smart_wallet_address);
+    const ownerSmartWallet = (await this.smartWalletService.getSmartWalletByAddress(nft.new_owner_smart_wallet_address)).toObject();
     return await this.nftService.updateNftOwner(nft, ownerSmartWallet);
   }
 

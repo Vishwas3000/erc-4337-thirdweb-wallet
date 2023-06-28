@@ -1,43 +1,45 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { MetamaskWallet } from './metamask-wallet.entity';
-import { MetamaskWalletRepository } from './metamask-wallet.repository';
-import { User } from 'src/user/user.entity';
+import { InjectModel } from '@nestjs/mongoose';
+import { MetamaskWallet, MetamaskWalletDocument } from './metamask-wallet.entity';
+import { User, UserDocument } from 'src/user/user.entity';
 import { CreateMetamaskWalletDto } from './dto/create-metamask-wallet.dto';
 import { SmartWallet } from 'src/smart-wallet/smart-wallet.entity';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class MetamaskWalletService {
-    constructor(@InjectRepository(MetamaskWallet) private readonly metamaskWalletRepository: MetamaskWalletRepository){}
+    constructor(@InjectModel(MetamaskWallet.name) private readonly metamaskWalletModel: Model<MetamaskWalletDocument>){}
 
-    async createMetamaskWallet(wallet: CreateMetamaskWalletDto, user: User): Promise<MetamaskWallet>{
+    async createMetamaskWallet(walletDto: CreateMetamaskWalletDto, user: UserDocument){
         try{
-            const newMetamaskWallet = await this.metamaskWalletRepository.save({
-                wallet_address: wallet.wallet_address,
-            });
-    
-            user.metamask_wallets = [...user.metamask_wallets, newMetamaskWallet];
+            const {wallet_address} = walletDto;
+            const newMetamaskWallet = new this.metamaskWalletModel({wallet_address});
+            await newMetamaskWallet.save();
+            
+            user.metamask_wallets.push(newMetamaskWallet);
             await user.save();
+            // console.log('newMetamaskWallet: ', newMetamaskWallet);
             return newMetamaskWallet;
 
         }catch(error){
+            console.log('error: ', error);
             if(error.code === '23505'){
-                return await this.metamaskWalletRepository.findOne({where:{wallet_address:wallet.wallet_address}});
+                return await this.metamaskWalletModel.findOne({where:{wallet_address:walletDto.wallet_address}});
             }
         }
     }
 
     getMetamaskWalletById(id: number):Promise<MetamaskWallet>{
-        return this.metamaskWalletRepository.findOne({where:{id:id}, relations:{smart_wallets:true}});
+        return this.metamaskWalletModel.findById(id).exec();
     }
 
-    getMetamaskWalletByAddress(wallet_address: string):Promise<MetamaskWallet>{
-        return this.metamaskWalletRepository.findOne({where:{wallet_address:wallet_address}, relations:{smart_wallets:true}})
+    getMetamaskWalletByAddress(wallet_address: string):Promise<MetamaskWalletDocument>{
+        return this.metamaskWalletModel.findOne({wallet_address:wallet_address}).exec()
     }
 
-    getSmartWalletsByMetamaskWalletAddress(wallet_address: string):Promise<SmartWallet[]>{
-        return this.metamaskWalletRepository.findOne({where:{wallet_address:wallet_address}, relations:{smart_wallets:true}}).then((metamaskWallet)=>{
-            return metamaskWallet.smart_wallets;
-        })
-    }
+    // getSmartWalletsByMetamaskWalletAddress(wallet_address: string):Promise<SmartWallet[]>{
+    //     return this.metamaskWalletRepository.findOne({where:{wallet_address:wallet_address}, relations:{smart_wallets:true}}).then((metamaskWallet)=>{
+    //         return metamaskWallet.smart_wallets;
+    //     })
+    // }
 }

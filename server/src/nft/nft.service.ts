@@ -1,31 +1,30 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Nft } from './nft.entity';
-import { NftRepository } from './nft.repository';
+import { Nft, NftDocument } from './nft.entity';
 import { CreateNftDto } from './dto/create-nft.dto';
-import { SmartWallet } from 'src/smart-wallet/smart-wallet.entity';
+import { SmartWallet, SmartWalletDocument } from 'src/smart-wallet/smart-wallet.entity';
 import { UpdateNftOwnerDto } from './dto/update-nftOwner.dto';
 import { UpdateNftListingDto } from './dto/update-nftListing.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class NftService {
-    constructor(@InjectRepository(Nft) private readonly nftRepository: NftRepository){}
+    constructor(@InjectModel(Nft.name) private readonly nftModel: Model<NftDocument>){}
 
     async createNft(nft: CreateNftDto, smart_wallet: SmartWallet): Promise<Nft>{
-        const newNft = await this.nftRepository.save({
-            id: nft.id,
-            nft_smart_contract_address: nft.nft_smart_contract_address,
-        });
-        smart_wallet.nfts_owned = [...smart_wallet.nfts_owned, newNft];
+        const {id, nft_smart_contract_address} = nft;
+        const newNft = new this.nftModel({nftId:id,nft_smart_contract_address: nft_smart_contract_address});
 
-        smart_wallet.nfts_created = [...smart_wallet.nfts_created, newNft];
-        
-        await smart_wallet.save();
+        newNft.owner_smart_wallet = smart_wallet;
+        newNft.creator_smart_wallet = smart_wallet;
+
         return newNft;
     }
 
+    
+
     async updateNftOwner(nft: UpdateNftOwnerDto, smart_wallet: SmartWallet): Promise<Nft>{
-        const updateNft = await this.nftRepository.findOne({where:{id:nft.id}, relations:{owner_smart_wallet:true}});
+        const updateNft = await this.nftModel.findOne({where:{id:nft.id}, relations:{owner_smart_wallet:true}});
         updateNft.owner_smart_wallet = smart_wallet;
         updateNft.is_listed = false;
         
@@ -35,7 +34,7 @@ export class NftService {
     }
 
     async updateNftListing(nft: UpdateNftListingDto): Promise<Nft>{
-        const updateNft = await this.nftRepository.findOne({where:{id:nft.id}});
+        const updateNft = await this.nftModel.findOne({where:{id:nft.id}});
         updateNft.is_listed = nft.is_listed;
 
         if(nft.listing_price)
@@ -47,7 +46,7 @@ export class NftService {
     }
 
     async getAllListedNfts(): Promise<Nft[]>{
-        const listedNfts = await this.nftRepository.find({where:{is_listed:true}, relations:{owner_smart_wallet:true}});
+        const listedNfts = await this.nftModel.find({where:{is_listed:true}, relations:{owner_smart_wallet:true}});
 
         return listedNfts;
     }

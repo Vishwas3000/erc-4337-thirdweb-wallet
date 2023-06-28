@@ -1,22 +1,25 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "src/user/user.entity";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document} from 'mongoose';
+import * as mongoose from 'mongoose';
+import { Type } from 'class-transformer';
 import { SmartWallet } from "src/smart-wallet/smart-wallet.entity";
 
-@Entity()
-export class MetamaskWallet extends BaseEntity{
-    @PrimaryGeneratedColumn()
-    id: number;
+export type MetamaskWalletDocument = MetamaskWallet & Document;
 
-    @Column({unique: true})
+@Schema({timestamps: true})
+export class MetamaskWallet {
+    @Prop({unique: true})
     wallet_address: string;
 
-    @ManyToOne(()=>User, (user)=>user.metamask_wallets)
+    @Prop({type: mongoose.Schema.Types.ObjectId, ref: 'User'})
+    @Type(() => User)
     user: User;
 
-    @OneToMany(()=>SmartWallet, (smart_wallet)=>smart_wallet.metamask_wallet)
+    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'SmartWallet' }] })
+    @Type(() => SmartWallet)
     smart_wallets: SmartWallet[];
-
-    @Column()
-    @CreateDateColumn()
-    added_at: Date;
 }
+
+export const MetamaskSchema = SchemaFactory.createForClass(MetamaskWallet);
+

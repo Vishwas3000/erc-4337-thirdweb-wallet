@@ -5,12 +5,9 @@ import { ConfigService, ConfigModule } from '@nestjs/config';
 export default class TypeOrmConfig{
     static getOrmConfig(configService:ConfigService): TypeOrmModuleOptions{
         return {
-            type: 'postgres',
-            host: configService.get('DB_HOST') ,
-            port: parseInt (configService.get('DB_PORT') ),
-            username: configService.get('DB_USERNAME') ,
-            password: configService.get('DB_PASSWORD') ,
-            database: configService.get('DB_NAME') ,
+            type: 'mongodb',
+            url: configService.get<string>('MONGODB_URI'),
+            logging: true,
             entities: [__dirname + '/../**/*.entity.{js,ts}'],
             synchronize: true,
         }
