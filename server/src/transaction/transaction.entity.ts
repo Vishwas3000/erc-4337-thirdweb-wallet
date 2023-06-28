@@ -1,4 +1,3 @@
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne} from "typeorm";
 import { SmartWallet } from "src/smart-wallet/smart-wallet.entity";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
