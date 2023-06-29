@@ -6,14 +6,6 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  // async rewrites() {
-  //   return [
-  //     {
-  //       source: "/",
-  //       destination: "http://localhost:3000/",
-  //     },
-  //   ]
-  // },
 }
 
 module.exports = nextConfig
