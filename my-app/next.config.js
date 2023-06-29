@@ -5,4 +5,7 @@ const nextConfig = {
   swcMinify: true,
 }
 
-module.exports = nextConfig
+module.exports = {
+  ...nextConfig,
+  distDir: "out", // Add the distDir configuration
+}
